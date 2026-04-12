@@ -35,22 +35,36 @@
         button:focus, a:focus { outline: 2px solid var(--color-accent); outline-offset: 2px; }
     </style>
 </head>
-<body class="pb-32 md:pb-24">
+<body class="min-h-screen flex flex-col">
 
     <!-- Top App Bar -->
-    <header class="fixed top-0 w-full z-50 bg-[#131313]/60 backdrop-blur-md h-14 md:h-16 flex justify-between items-center px-4 md:px-6">
-        <div class="flex items-center gap-2 md:gap-4">
-            <button class="p-2 hover:bg-white/10 rounded-lg transition md:hidden">
-                <span class="material-icons text-[#E9BCB6]">menu</span>
+    <header class="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-md px-4 md:px-6 py-2">
+        <div class="flex items-center justify-between gap-4 md:gap-6 h-12 md:h-14">
+            <div class="flex items-center gap-3">
+                <button class="p-2 hover:bg-white/10 rounded-lg transition md:hidden">
+                    <span class="material-icons text-[#E9BCB6]">menu</span>
+                </button>
+                <h1 class="text-xl font-bold italic text-[#E50914] tracking-tighter whitespace-nowrap">CINEBOOK</h1>
+            </div>
+            <nav class="hidden md:flex items-center gap-4 flex-1 justify-center">
+                <a href="#" class="text-[#E50914] text-xs uppercase tracking-widest font-bold hover:text-white transition">Movies</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Cinemas</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Booking</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Show Time</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Contact</a>
+            </nav>
+            <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
+                <span class="material-icons text-red text-[20px]">confirmation_number</span>
             </button>
-            <h1 class="text-lg md:text-2xl font-black italic text-[#E50914] tracking-tighter whitespace-nowrap">CINEBOOK</h1>
+            <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
+                <span class="material-icons text-white text-[20px]">person</span>
+            </button>
         </div>
-        <button class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
-            <span class="material-icons text-white text-[20px]">person</span>
-        </button>
     </header>
 
-    <!-- Hero Section -->
+    <main class="flex-1 pt-16 md:pt-18">
+
+    <!-- Section -->
     <section class="relative w-full h-screen md:h-[85vh] flex items-end pt-14 md:pt-0 pb-6 md:pb-12 px-4 md:px-6 overflow-hidden">
         <img 
             src="https://img.pptvhd36.com/thumbor/2025/10/31/news-aba9b15.jpg" 
@@ -61,13 +75,17 @@
         
         <div class="relative z-10 w-full max-w-2xl">
             <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-4">
-                <span class="bg-[#E50914] text-white text-[8px] md:text-[10px] font-bold px-2 md:px-3 py-1 rounded uppercase tracking-wider">Coming Soon</span>
                 <span class="text-[#E9BCB6]/80 text-[8px] md:text-[10px] font-bold uppercase tracking-widest">October 31, 2024</span>
             </div>
             
             <h2 class="text-2xl md:text-5xl font-black italic uppercase leading-tight md:leading-[0.9] tracking-tighter mb-4 md:mb-8">
                 Takhon:<br>The Cursed Mask
             </h2>
+
+            <div class="flex flex-wrap items-center gap-2 md:gap-3 mb-4">
+                <span class="text-white text-[8px] md:text-[10px] font-bold uppercase tracking-widest">Takhon: The Cursed Mask is a visually intriguing 
+                    horror film that blends supernatural fear with Thai folklore. Inspired by the traditional Phi Ta Khon festival, the movie builds its story around a cursed mask tied to death, spirits, and ancient beliefs.</span>
+            </div>
             
             <div class="grid grid-cols-2 gap-2 md:flex md:gap-4">
                 <button class="bg-[#E50914] text-white font-bold py-2.5 md:py-4 px-3 md:px-6 rounded-full flex items-center justify-center gap-1 md:gap-2 text-xs md:text-sm hover:bg-red-600 active:scale-95 transition-all">
@@ -87,7 +105,6 @@
     <section class="mt-10 md:mt-12 px-4 md:px-6">
         <div class="flex justify-between items-start md:items-center gap-4 mb-6">
             <div>
-                <span class="text-[#E9BCB6]/60 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.2em] block mb-1">Now Showing</span>
                 <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Hot Movies</h3>
             </div>
             <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
@@ -96,19 +113,16 @@
             </a>
         </div>
 
-        <div class="flex gap-3 md:gap-4 overflow-x-auto pb-4 -mx-4 md:-mx-6 px-4 md:px-6 no-scrollbar">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
             @foreach($hotMovies as $movie)
-            <div class="min-w-[140px] md:min-w-[280px] group cursor-pointer flex-shrink-0">
+            <div class="group cursor-pointer">
                 <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
-                    <img 
-                        src="{{ $movie['image'] }}" 
+                    <img
+                        src="{{ $movie['image'] }}"
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         alt="{{ $movie['title'] }}"
                         loading="lazy"
                     >
-                    @if($movie['isIMAX'])
-                    <span class="absolute top-2 md:top-4 right-2 md:right-4 bg-black/70 backdrop-blur-md text-white text-[7px] md:text-[8px] font-bold px-1.5 md:px-2 py-0.5 md:py-1 rounded border border-white/20">IMAX</span>
-                    @endif
                 </div>
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
                 <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
@@ -124,67 +138,51 @@
         <span class="block text-center text-[#E9BCB6]/40 text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] mb-8 md:mb-12">Exclusive Offers</span>
         
         <!-- Dining Offer Card -->
-        <div class="relative w-full aspect-video md:aspect-auto md:h-64 rounded-2xl md:rounded-3xl overflow-hidden mb-6 flex items-end p-4 md:p-8 group cursor-pointer">
-            <img 
-                src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=450&fit=crop" 
-                class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-opacity duration-300"
-                alt="Midnight Feast Dining Offer"
-            >
-            <div class="absolute inset-0 bg-gradient-to-t from-[#121212] via-transparent to-transparent"></div>
+        <div class="relative w-full aspect-video md:aspect-auto md:h-64 rounded-2xl md:rounded-3xl overflow-hidden mb-6 flex items-end p-4 md:p-8 group cursor-pointer bg-[#AA8F2E]">
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
             <div class="relative z-10">
-                <span class="text-[#E50914] text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1 md:mb-2 block">Dining</span>
-                <h4 class="text-lg md:text-3xl font-black italic uppercase tracking-tighter mb-1 md:mb-2">Midnight Feast</h4>
-                <p class="text-[#E9BCB6]/80 text-xs md:text-sm max-w-[200px]">Unlimited popcorn & sodas for late-night premieres.</p>
+                <span class="text-[#FFD97E] text-[8px] md:text-[10px] font-bold uppercase tracking-widest mb-1 md:mb-2 block">Dining</span>
+                <h4 class="text-white text-lg md:text-3xl font-black italic uppercase tracking-tighter mb-1 md:mb-2">Midnight Feast</h4>
+                <p class="text-[#F3E0AA] text-xs md:text-sm max-w-[200px]">Get 50% off on all large popcorn combos
+during screenings after 10:00 PM</p>
             </div>
         </div>
 
         <!-- Membership Pass Card -->
-        <div class="bg-[#E50914] rounded-2xl md:rounded-3xl p-6 md:p-8 relative overflow-hidden">
-            <div class="flex justify-between items-start mb-6 md:mb-12">
-                <span class="material-icons text-white/30 text-3xl md:text-4xl">confirmation_number</span>
-                <div class="text-right">
-                    <span class="text-white/70 text-[7px] md:text-[8px] font-bold uppercase tracking-widest block mb-1">Member Pass</span>
-                    <span class="text-white font-black italic uppercase text-sm md:text-xl">Noir Premiere</span>
-                </div>
-            </div>
-            <h4 class="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-white mb-4 md:mb-6">Pass</h4>
-            <button class="bg-white text-[#E50914] text-[8px] md:text-[10px] font-black uppercase tracking-widest px-6 md:px-8 py-2 md:py-3 rounded-full hover:bg-gray-100 active:scale-95 transition-all">
-                Upgrade Now
-            </button>
-        </div>
+       
     </section>
 
-    <!-- Footer -->
-    <footer class="w-full px-4 md:px-8 py-8 md:py-12 flex flex-col items-center gap-4 md:gap-6 border-t border-[#5E3F3B]/10">
-        <span class="text-[#E50914] font-black tracking-widest text-[10px] md:text-xs uppercase">CINEBOOK</span>
-        <div class="flex gap-4 md:gap-6 text-center flex-wrap justify-center">
-            <a href="#" class="text-[#E9BCB6]/50 text-[8px] md:text-[10px] font-bold uppercase tracking-widest hover:text-[#E9BCB6] transition">Privacy</a>
-            <a href="#" class="text-[#E9BCB6]/50 text-[8px] md:text-[10px] font-bold uppercase tracking-widest hover:text-[#E9BCB6] transition">Terms</a>
-            <a href="#" class="text-[#E9BCB6]/50 text-[8px] md:text-[10px] font-bold uppercase tracking-widest hover:text-[#E9BCB6] transition">Support</a>
-            <a href="#" class="text-[#E9BCB6]/50 text-[8px] md:text-[10px] font-bold uppercase tracking-widest hover:text-[#E9BCB6] transition">Careers</a>
-        </div>
-        <p class="text-[#E9BCB6]/40 text-[7px] md:text-[8px] uppercase tracking-widest text-center">© 2024 CINEBOOK. THE DIGITAL AUTEUR.</p>
-    </footer>
+    </main>
 
-    <!-- Bottom Nav Bar (Mobile) -->
-    <nav class="fixed bottom-0 w-full z-50 bg-[#131313]/90 backdrop-blur-xl h-20 px-2 pb-2 flex justify-around items-center rounded-t-3xl border-t border-[#5E3F3B]/20 shadow-[0_-10px_40px_rgba(229,9,20,0.1)] md:hidden">
-        <button class="flex flex-col items-center justify-center text-[#E50914] hover:scale-110 transition">
-            <span class="material-icons">movie</span>
-            <span class="font-['Manrope'] text-[9px] uppercase tracking-widest font-bold mt-0.5">Movies</span>
-        </button>
-        <button class="flex flex-col items-center justify-center text-[#E9BCB6]/60 hover:text-[#E9BCB6] transition">
-            <span class="material-icons">theater_comedy</span>
-            <span class="font-['Manrope'] text-[9px] uppercase tracking-widest font-bold mt-0.5">Cinemas</span>
-        </button>
-        <button class="flex flex-col items-center justify-center text-[#E9BCB6]/60 hover:text-[#E9BCB6] transition">
-            <span class="material-icons">confirmation_number</span>
-            <span class="font-['Manrope'] text-[9px] uppercase tracking-widest font-bold mt-0.5">Tickets</span>
-        </button>
-        <button class="flex flex-col items-center justify-center text-[#E9BCB6]/60 hover:text-[#E9BCB6] transition">
-            <span class="material-icons">person</span>
-            <span class="font-['Manrope'] text-[9px] uppercase tracking-widest font-bold mt-0.5">Profile</span>
-        </button>
-    </nav>
+    <!-- Footer -->
+    <footer class="mt-auto bg-black text-red px-6 md:px-16 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div>
+            <h2 class="text-xl font-bold tracking-widest mb-4 text-[#E50914]">CINEBOOK</h2>
+            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
+                Redefining the cinematic experience with premium curation, 
+                state-of-the-art technology, and absolute Noir aesthetics.
+            </p>
+        </div>
+        <div>
+            <h3 class="text-sm font-bold uppercase tracking-widest mb-4">Contact</h3>
+            <p class="text-gray-400 text-sm">+84 566 940 182</p>
+            <p class="text-gray-400 text-sm mt-2">
+                12 Ly Tu Trong, Ninh Kieu, Can Tho, Viet Nam
+            </p>
+        </div>
+        <div>
+            <h3 class="text-sm font-bold uppercase tracking-widest mb-4">Connect</h3>
+            <p class="text-gray-400 text-sm hover:text-white cursor-pointer transition">Instagram</p>
+            <p class="text-gray-400 text-sm mt-2 hover:text-white cursor-pointer transition">Facebook</p>
+        </div>
+
+    </div>
+    <div class="mt-10 border-t border-gray-800 pt-6 text-center text-gray-500 text-xs tracking-widest">
+        © 2026 CINEBOOK. ALL RIGHTS RESERVED
+    </div>
+</footer>
 
 </body>
 </html>

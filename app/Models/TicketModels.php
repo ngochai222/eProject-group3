@@ -13,10 +13,6 @@ class TicketModels extends Model
         'showtime_id',
         'seat_id',
         'price',
-        'status',
-        'ticket_code',
-        'booking_time',
-        'payment_method'
     ];
 
     public function showtime()

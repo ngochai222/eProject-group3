@@ -56,9 +56,12 @@
             <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
                 <span class="material-icons text-red text-[20px]">confirmation_number</span>
             </button>
-            <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
-                <span class="material-icons text-white text-[20px]">person</span>
-            </button>
+            <a href="/login">
+                 <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
+                
+                    <span class="material-icons text-white text-[20px]">person</span>
+                 </button>
+             </a>
         </div>
     </header>
 

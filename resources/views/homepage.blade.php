@@ -49,8 +49,8 @@
             <nav class="hidden md:flex items-center gap-4 flex-1 justify-center">
                 <a href="#" class="text-[#E50914] text-xs uppercase tracking-widest font-bold hover:text-white transition">Movies</a>
                 <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Cinemas</a>
-                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Booking</a>
-                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Show Time</a>
+                <a href="{{ route('showtime') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">SHOW TIME </a>
+                <a href="{{ route('booking') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition"> BOOKING</a>
                 <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Contact</a>
             </nav>
             <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">

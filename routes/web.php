@@ -8,6 +8,9 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotpwController;
+use App\Http\Controllers\ShowtimeController;
+use App\Http\Controllers\BookingController;
+
 
 Route::get('/', [MovieController::class, 'index']);
 
@@ -25,3 +28,5 @@ Route::post('/forgot-password', [ForgotpwController::class, 'sendResetLinkEmail'
 
 Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+Route::get('/showtime', [ShowtimeController::class, 'index'])->name('showtime');
+Route::get('/booking', [BookingController::class, 'index'])->name('booking');

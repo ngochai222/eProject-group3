@@ -81,8 +81,8 @@ input:focus {
 <!-- Options: Remember Me & Forgot Password -->
 <div class="flex items-center justify-between text-xs">
 <div class="flex items-center">
-<input class="h-4 w-4 rounded border-gray-700 bg-gray-800 text-red-600 focus:ring-red-500 focus:ring-offset-black" id="remember-me" name="remember-me" type="checkbox"/>
-<label class="ml-2 block text-gray-400" for="remember-me">Remember me</label>
+<input class="h-4 w-4 rounded border-gray-700 bg-gray-800 text-red-600 focus:ring-red-500 focus:ring-offset-black" id="remember" name="remember" type="checkbox"/>
+<label class="ml-2 block text-gray-400" for="remember">Remember me</label>
 </div>
 <a class="font-medium text-gray-400 hover:text-white transition-colors" href="{{ route('password.request') }}">Forgot password?</a>
 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -17,10 +18,27 @@ class LoginController extends Controller
         'password' => ['required'],
     ]);
 
-    if (Auth::guard('customer')->attempt(['customer_email' => $credentials['username'], 'password' => $credentials['password']])) {
+    $remember = $request->has('remember');
+
+    if (Auth::guard('customer')->attempt(['customer_email' => $credentials['username'], 'password' => $credentials['password']], $remember)) {
         $request->session()->regenerate();
-        return redirect()->intended('dashboard');
+        
+        $user = Auth::guard('customer')->user();
+        $customerName = $user->customer_name;
+        
+        // Log for debugging
+        Log::info('Customer logged in:', [
+            'customer_id' => $user->customer_id,
+            'customer_email' => $user->customer_email,
+            'session_id' => session()->getId(),
+        ]);
+        
+        return redirect()->route('home')->with('success', "Welcome back, $customerName!");
     }
+
+    Log::warning('Login attempt failed:', [
+        'email' => $credentials['username'],
+    ]);
 
     return back()->withErrors([
         'username' => 'Thông tin đăng nhập không chính xác.',

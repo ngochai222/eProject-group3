@@ -38,4 +38,9 @@ class MovieController extends Controller
 
         return view('homepage', compact('hotMovies'));
     }
+
+    public function cinema()
+    {
+        return view('cinema');
+    }
 }

@@ -21,14 +21,14 @@
                         "on-tertiary": "#003061",
                         "on-tertiary-container": "#f8f9ff",
                         "on-background": "#e2e2e2",
-                        "surface-container-highest": "#353535",
+                        "surface-container-highest": "#000000ff",
                         "error": "#ffb4ab",
                         "secondary-fixed": "#ffdad5",
                         "on-surface": "#e2e2e2",
                         "primary-fixed": "#ffdad5",
                         "outline": "#af8782",
                         "on-primary": "#690003",
-                        "surface-container-high": "#2a2a2a",
+                        "surface-container-high": "#000000ff",
                         "on-secondary-fixed": "#410001",
                         "on-secondary": "#690003",
                         "on-error": "#690005",
@@ -39,11 +39,11 @@
                         "on-secondary-fixed-variant": "#8e1210",
                         "primary-container": "#e50914",
                         "outline-variant": "#5e3f3b",
-                        "surface-bright": "#393939",
+                        "surface-bright": "#000000ff",
                         "inverse-surface": "#e2e2e2",
                         "on-primary-fixed-variant": "#930007",
                         "primary-fixed-dim": "#ffb4aa",
-                        "surface-variant": "#353535",
+                        "surface-variant": "#000000ff",
                         "surface-container": "#1f1f1f",
                         "secondary": "#ffb4aa",
                         "inverse-primary": "#c0000c",
@@ -97,18 +97,7 @@
   </style>
   </head>
 <body class="bg-surface selection:bg-primary-container selection:text-white">
-<!-- TopAppBar -->
-<header class="flex justify-between items-center w-full px-6 py-4 fixed top-0 z-50 backdrop-blur-xl bg-opacity-80 bg-[#131313] dark:bg-[#131313] shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
-<div class="flex items-center gap-4">
-<button class="p-2 -ml-2 hover:bg-[#393939] transition-colors duration-300 rounded-full active:opacity-80 scale-95 duration-200">
-<span class="material-symbols-outlined text-[#E50914]" data-icon="arrow_back">arrow_back</span>
-</button>
-<h1 class="font-['Epilogue'] tracking-tighter uppercase font-bold text-lg text-[#E50914] dark:text-[#E50914]">SELECT CINEMA</h1>
-</div>
-<div class="flex items-center gap-2">
-<span class="text-[#E50914] font-black italic tracking-tighter text-2xl">Cinebook</span>
-</div>
-</header>
+@include('components.header')
 <main class="pt-24 pb-32 px-6 max-w-5xl mx-auto">
 <!-- Search/Filter Section -->
 <section class="mb-10 space-y-6">
@@ -141,16 +130,15 @@
 <div class="p-6 space-y-3">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">Cinebook Hoan Kiem</h3>
+<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Sense Cityscape</h3>
 <p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                12 Ly Thai To Street, Hoan Kiem, Hanoi
+                                1, Hoa Binh, Tan An, Ninh Kieu, Can Tho
                             </p>
 </div>
 <span class="material-symbols-outlined text-primary-container" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
 </div>
 <div class="pt-4 flex items-center justify-between">
-<span class="text-xs font-bold text-on-surface/40 tracking-widest uppercase">8.4 KM AWAY</span>
 <button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
 </div>
 </div>
@@ -170,15 +158,14 @@
 <div class="p-6 space-y-3">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">Cinebook Landmark 81</h3>
+<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">LOTTE Cinema Cần Thơ Ninh Kiều</h3>
 <p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                B1, Vincom Landmark 81, Binh Thanh, HCMC
+                                84 Mau Than, Cai Khe, Can Tho
                             </p>
 </div>
 </div>
 <div class="pt-4 flex items-center justify-between">
-<span class="text-xs font-bold text-on-surface/40 tracking-widest uppercase">2.1 KM AWAY</span>
 <button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
 </div>
 </div>
@@ -197,15 +184,14 @@
 <div class="p-6 space-y-3">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">Cinebook Da Nang Riverside</h3>
+<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Vincom Hùng Vương</h3>
 <p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                Bach Dang Street, Hai Chau, Da Nang
+                             02 Hung Vuong, Thoi Binh, Ninh Kieu, Can Tho
                             </p>
 </div>
 </div>
 <div class="pt-4 flex items-center justify-between">
-<span class="text-xs font-bold text-on-surface/40 tracking-widest uppercase">15.2 KM AWAY</span>
 <button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
 </div>
 </div>
@@ -225,38 +211,18 @@
 <div class="p-6 space-y-3">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">Cinebook Lotte Westlake</h3>
+<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Vincom Xuân Khánh</h3>
 <p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                272 Vo Chi Cong, Tay Ho, Hanoi
+                            209 20/4, Ninh Kieu, Can Tho
                             </p>
 </div>
 </div>
 <div class="pt-4 flex items-center justify-between">
-<span class="text-xs font-bold text-on-surface/40 tracking-widest uppercase">12.0 KM AWAY</span>
 <button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
 </div>
 </div>
 </div>
 </div>
 </main>
-<!-- BottomNavBar -->
-<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 backdrop-blur-2xl border-t border-white/5 bg-[#131313]/90 dark:bg-[#131313]/90 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
-<a class="flex flex-col items-center justify-center text-[#e2e2e2]/60 hover:text-white transition-all active:scale-90 tap-highlight-none" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="movie">movie</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Movies</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#E50914] bg-[#E50914]/10 rounded-xl px-4 py-1 active:scale-90 tap-highlight-none" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="theater_comedy" style="font-variation-settings: 'FILL' 1;">theater_comedy</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Cinemas</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#e2e2e2]/60 hover:text-white transition-all active:scale-90 tap-highlight-none" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="confirmation_number">confirmation_number</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Tickets</span>
-</a>
-<a class="flex flex-col items-center justify-center text-[#e2e2e2]/60 hover:text-white transition-all active:scale-90 tap-highlight-none" href="#">
-<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
-<span class="font-['Manrope'] font-medium text-[10px] uppercase tracking-widest">Profile</span>
-</a>
-</nav>
 </body></html>

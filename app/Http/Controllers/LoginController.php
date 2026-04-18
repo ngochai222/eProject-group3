@@ -20,6 +20,12 @@ class LoginController extends Controller
 
     $remember = $request->has('remember');
 
+    // Admin hardcoded check
+    if ($credentials['username'] === 'admin@gmail.com' && $credentials['password'] === '123456') {
+        session(['admin_logged_in' => true, 'admin_email' => $credentials['username']]);
+        return redirect()->route('admin.dashboard');
+    }
+
     if (Auth::guard('customer')->attempt(['customer_email' => $credentials['username'], 'password' => $credentials['password']], $remember)) {
         $request->session()->regenerate();
         

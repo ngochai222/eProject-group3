@@ -14,16 +14,19 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-        Customer::create([
-            'customer_name' => 'Test Customer',
-            'customer_email' => 'test@example.com',
-            'customer_phone' => '0123456789',
-            'customer_password' => Hash::make('password'),
-            'customer_date_of_birth' => '1990-01-01',
-            'customer_gender' => 'Male',
-            'customer_avatar' => '',
-            'customer_favorite' => '',
-            'customer_address' => 'Test Address',
-        ]);
+        // Check if customer already exists
+        if (!Customer::where('customer_email', 'test@example.com')->exists()) {
+            Customer::create([
+                'customer_name' => 'Test Customer',
+                'customer_email' => 'test@example.com',
+                'customer_phone' => '0123456789',
+                'customer_password' => Hash::make('password'),
+                'customer_date_of_birth' => '1990-01-01',
+                'customer_gender' => 'Male',
+                'customer_avatar' => '',
+                'customer_favorite' => '',
+                'customer_address' => 'Test Address',
+            ]);
+        }
     }
 }

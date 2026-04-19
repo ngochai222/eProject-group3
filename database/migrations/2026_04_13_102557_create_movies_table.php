@@ -14,7 +14,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('duration')->nullable();
             $table->date('release_date')->nullable();
-
+            $table->text('cast')->nullable();
+            $table->text('genre')->nullable();
             $table->string('poster')->nullable(); // thêm ảnh phim
 
             $table->timestamps();

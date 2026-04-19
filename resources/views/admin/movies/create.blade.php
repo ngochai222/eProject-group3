@@ -18,6 +18,16 @@
     </div>
 
     <div class="mb-3">
+        <label>Genre</label>
+        <input type="text" name="genre" class="form-control" placeholder="e.g. Action, Horror">
+    </div>
+
+    <div class="mb-3">
+        <label>Cast</label>
+        <input type="text" name="cast" class="form-control" placeholder="e.g. Tom Hanks, Brad Pitt">
+    </div>
+
+    <div class="mb-3">
         <label>Duration (minutes)</label>
         <input type="number" name="duration" class="form-control">
     </div>
@@ -30,10 +40,12 @@
     <div class="mb-3">
         <label>Poster</label>
         <input type="file" name="poster" class="form-control" onchange="previewImage(event)">
+        <img id="preview" width="120" style="display:none; margin-top:8px;">
     </div>
 
     <div class="mb-3">
-        <img id="preview" width="120" style="display:none;">
+        <label>Trailer</label>
+        <input type="file" name="trailer" class="form-control" accept="video/*">
     </div>
 
     <button class="btn btn-warning">Save</button>

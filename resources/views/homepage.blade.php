@@ -49,8 +49,8 @@
             <nav class="hidden md:flex items-center gap-4 flex-1 justify-center">
                 <a href="#" class="text-[#E50914] text-xs uppercase tracking-widest font-bold hover:text-white transition">Movies</a>
                 <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Cinemas</a>
-                <a href="{{ route('showtime') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">SHOW TIME </a>
-                <a href="{{ route('booking') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition"> BOOKING</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Booking</a>
+                <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Show Time</a>
                 <a href="#" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Contact</a>
             </nav>
             <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
@@ -66,6 +66,14 @@
     </header>
 
     <main class="flex-1 pt-16 md:pt-18">
+
+    @if (session('success'))
+        <div class="mx-4 mt-20 rounded-2xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-100 shadow-lg shadow-green-500/10 md:mx-6">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    
 
     <!-- Section -->
     <section class="relative w-full h-screen md:h-[85vh] flex items-end pt-14 md:pt-0 pb-6 md:pb-12 px-4 md:px-6 overflow-hidden">
@@ -151,41 +159,27 @@
 during screenings after 10:00 PM</p>
             </div>
         </div>
-
-        <!-- Membership Pass Card -->
-       
     </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="mt-auto bg-black text-red px-6 md:px-16 py-12">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-            <h2 class="text-xl font-bold tracking-widest mb-4 text-[#E50914]">CINEBOOK</h2>
-            <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
-                Redefining the cinematic experience with premium curation, 
-                state-of-the-art technology, and absolute Noir aesthetics.
-            </p>
-        </div>
-        <div>
-            <h3 class="text-sm font-bold uppercase tracking-widest mb-4">Contact</h3>
-            <p class="text-gray-400 text-sm">+84 566 940 182</p>
-            <p class="text-gray-400 text-sm mt-2">
-                12 Ly Tu Trong, Ninh Kieu, Can Tho, Viet Nam
-            </p>
-        </div>
-        <div>
-            <h3 class="text-sm font-bold uppercase tracking-widest mb-4">Connect</h3>
-            <p class="text-gray-400 text-sm hover:text-white cursor-pointer transition">Instagram</p>
-            <p class="text-gray-400 text-sm mt-2 hover:text-white cursor-pointer transition">Facebook</p>
-        </div>
+    @include('components.footer')
 
-    </div>
-    <div class="mt-10 border-t border-gray-800 pt-6 text-center text-gray-500 text-xs tracking-widest">
-        © 2026 CINEBOOK. ALL RIGHTS RESERVED
-    </div>
-</footer>
+    <script>
+        function closeAlert() {
+            document.getElementById('success-alert').style.display = 'none';
+        }
+
+        // Auto-hide alert after 5 seconds
+        setTimeout(function() {
+            const alert = document.getElementById('success-alert');
+            if (alert) {
+                alert.style.transition = 'opacity 0.5s ease-out';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.style.display = 'none', 500);
+            }
+        }, 5000);
+    </script>
 
 </body>
 </html>

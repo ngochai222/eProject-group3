@@ -23,24 +23,32 @@ class MovieController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
-            'duration' => 'nullable|integer',
+            'title'        => 'required',
+            'description'  => 'nullable',
+            'genre'        => 'nullable',
+            'cast'         => 'nullable',
+            'duration'     => 'nullable|integer',
             'release_date' => 'nullable|date',
-            'poster' => 'nullable|image'
+            'poster'       => 'nullable|image',
+            'trailer'      => 'nullable|file|mimes:mp4,mov,avi,webm',
         ]);
 
-        // upload poster
         if ($request->hasFile('poster')) {
             $file = $request->file('poster');
-            $name = time().'_'.$file->getClientOriginalName();
+            $name = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $name);
             $data['poster'] = $name;
         }
 
-        Movie::create($data);
+        if ($request->hasFile('trailer')) {
+            $file = $request->file('trailer');
+            $name = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $name);
+            $data['trailer'] = $name;
+        }
 
-        return redirect()->route('admin.movies.index');
+        Movie::create($data);
+        return redirect()->route('admin.movies.index')->with('success', 'Movie added successfully.');
     }
 
     public function edit(string $id)
@@ -54,40 +62,52 @@ class MovieController extends Controller
         $movie = Movie::findOrFail($id);
 
         $data = $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
-            'duration' => 'nullable|integer',
+            'title'        => 'required',
+            'description'  => 'nullable',
+            'genre'        => 'nullable',
+            'cast'         => 'nullable',
+            'duration'     => 'nullable|integer',
             'release_date' => 'nullable|date',
-            'poster' => 'nullable|image'
+            'poster'       => 'nullable|image',
+            'trailer'      => 'nullable|file|mimes:mp4,mov,avi,webm',
         ]);
 
-        // update poster
         if ($request->hasFile('poster')) {
-            if ($movie->poster && File::exists(public_path('uploads/'.$movie->poster))) {
-                File::delete(public_path('uploads/'.$movie->poster));
+            if ($movie->poster && File::exists(public_path('uploads/' . $movie->poster))) {
+                File::delete(public_path('uploads/' . $movie->poster));
             }
-
             $file = $request->file('poster');
-            $name = time().'_'.$file->getClientOriginalName();
+            $name = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $name);
             $data['poster'] = $name;
         }
 
-        $movie->update($data);
+        if ($request->hasFile('trailer')) {
+            if ($movie->trailer && File::exists(public_path('uploads/' . $movie->trailer))) {
+                File::delete(public_path('uploads/' . $movie->trailer));
+            }
+            $file = $request->file('trailer');
+            $name = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $name);
+            $data['trailer'] = $name;
+        }
 
-        return redirect()->route('admin.movies.index');
+        $movie->update($data);
+        return redirect()->route('admin.movies.index')->with('success', 'Movie updated successfully.');
     }
 
     public function destroy(string $id)
     {
         $movie = Movie::findOrFail($id);
 
-        if ($movie->poster && File::exists(public_path('uploads/'.$movie->poster))) {
-            File::delete(public_path('uploads/'.$movie->poster));
+        if ($movie->poster && File::exists(public_path('uploads/' . $movie->poster))) {
+            File::delete(public_path('uploads/' . $movie->poster));
+        }
+        if ($movie->trailer && File::exists(public_path('uploads/' . $movie->trailer))) {
+            File::delete(public_path('uploads/' . $movie->trailer));
         }
 
         $movie->delete();
-
-        return redirect()->route('admin.movies.index');
+        return redirect()->route('admin.movies.index')->with('success', 'Movie deleted.');
     }
 }

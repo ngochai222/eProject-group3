@@ -95,6 +95,15 @@
        class="{{ request()->is('admin/reviews*') ? 'active' : '' }}">
         <i class="fa fa-star"></i> Reviews
     </a>
+
+    <div style="position: absolute; bottom: 20px; width: calc(250px - 40px);">
+        <form method="POST" action="{{ route('admin.logout') }}">
+            @csrf
+            <button type="submit" style="display:block; width:100%; background:#dc2626; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; text-align:left;">
+                <i class="fa fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
 </div>
 
 <!-- CONTENT -->

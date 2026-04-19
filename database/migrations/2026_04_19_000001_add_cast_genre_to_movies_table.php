@@ -6,19 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::table('movies', function (Blueprint $table) {
-            if (!Schema::hasColumn('movies', 'release_date')) {
-                $table->date('release_date')->nullable();
+            if (!Schema::hasColumn('movies', 'genre')) {
+                $table->string('genre')->nullable();
+            }
+            if (!Schema::hasColumn('movies', 'cast')) {
+                $table->text('cast')->nullable();
             }
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::table('movies', function (Blueprint $table) {
-            $table->dropColumn('release_date');
+            $table->dropColumn(['genre', 'cast']);
         });
     }
 };

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Illuminate\Support\Facades\Route;
 
@@ -9,12 +9,9 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotpwController;
-use App\Http\Controllers\ShowtimeController;
-use App\Http\Controllers\BookingController;
 
-// Admin
 use App\Http\Controllers\Admin\MovieController as AdminMovieController;
-use App\Http\Controllers\Admin\ShowtimeController as AdminShowtimeController;
+use App\Http\Controllers\Admin\ShowtimeController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 
@@ -25,3 +22,39 @@ Route::get('/', [MovieController::class, 'index']);
 Route::resource('tickets', TicketController::class);
 Route::resource('seats', SeatController::class);
 Route::resource('employees', EmployeesController::class);
+
+Route::prefix('admin')->name('admin.')->group(function () {
+
+// Commented out - views and models need to be created first
+// Route::resource('tickets', TicketController::class);
+// Route::resource('seats', SeatController::class);
+// Route::resource('employees', EmployeesController::class);
+
+Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout']);
+
+Route::get('/forgot-password', [ForgotpwController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotpwController::class, 'sendResetLinkEmail'])->name('password.email');
+
+Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+    // Dashboard
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])
+        ->name('dashboard');
+
+    // Movies (ADMIN)
+    Route::resource('movies', AdminMovieController::class);
+
+    // Showtimes
+    Route::resource('showtimes', ShowtimeController::class);
+
+    // Reviews
+    Route::resource('reviews', ReviewController::class);
+
+    // Test
+    Route::get('/test', function () {
+        return "ADMIN OK";
+    });
+
+});

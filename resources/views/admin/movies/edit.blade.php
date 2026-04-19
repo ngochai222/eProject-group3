@@ -19,6 +19,16 @@
     </div>
 
     <div class="mb-3">
+        <label>Genre</label>
+        <input type="text" name="genre" class="form-control" value="{{ $movie->genre }}" placeholder="e.g. Action, Horror">
+    </div>
+
+    <div class="mb-3">
+        <label>Cast</label>
+        <input type="text" name="cast" class="form-control" value="{{ $movie->cast }}" placeholder="e.g. Tom Hanks, Brad Pitt">
+    </div>
+
+    <div class="mb-3">
         <label>Duration</label>
         <input type="number" name="duration" class="form-control" value="{{ $movie->duration }}">
     </div>
@@ -31,13 +41,18 @@
     <div class="mb-3">
         <label>Poster</label>
         <input type="file" name="poster" class="form-control" onchange="previewImage(event)">
+        @if($movie->poster)
+            <img src="{{ asset('uploads/'.$movie->poster) }}" width="120" id="preview" style="margin-top:8px;">
+        @else
+            <img id="preview" width="120" style="display:none; margin-top:8px;">
+        @endif
     </div>
 
     <div class="mb-3">
-        @if($movie->poster)
-            <img src="{{ asset('uploads/'.$movie->poster) }}" width="120" id="preview">
-        @else
-            <img id="preview" width="120" style="display:none;">
+        <label>Trailer</label>
+        <input type="file" name="trailer" class="form-control" accept="video/*">
+        @if($movie->trailer)
+            <a href="{{ asset('uploads/'.$movie->trailer) }}" target="_blank" class="btn btn-sm btn-info mt-2">▶ Current Trailer</a>
         @endif
     </div>
 

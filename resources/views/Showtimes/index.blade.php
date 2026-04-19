@@ -17,7 +17,8 @@
             <p> Room: {{ $show->room->name ?? 'N/A' }}</p>
             <p> Time: {{ $show->start_time }}</p>
 
-            <a href="/booking" style="
+            <a href="{{ route('ticket.index') }}"
+            style="
                 display:inline-block;
                 margin-top:10px;
                 padding:8px 12px;

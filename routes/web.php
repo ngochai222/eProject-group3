@@ -47,7 +47,7 @@ Route::post('/register', [RegisterController::class, 'register']);
     Route::resource('movies', AdminMovieController::class);
 
     // Showtimes
-    Route::resource('showtimes', ShowtimeController::class);
+    Route::get('/showtimes', [ShowtimeController::class, 'index']);
 
     // Reviews
     Route::resource('reviews', ReviewController::class);

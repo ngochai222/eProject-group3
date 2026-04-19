@@ -19,7 +19,7 @@
                class="{{ request()->routeIs('cinema') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Cinemas
             </a>
-            <a href="#"
+            <a href="{{ route('index.blade.php') }}"
                class="{{ request()->routeIs('booking') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Booking
             </a>

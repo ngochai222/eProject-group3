@@ -11,7 +11,7 @@ class BookingController extends Controller
 {
     public function index()
     {     $bookings = Booking::with(['showtime', 'seat'])->where('user_id', auth()->id())->get();     
-        return view('booking.index', compact('bookings'));
+        return view('Booking.index', compact('bookings'));
     }
 
     public function create($showtime_id)
@@ -19,7 +19,7 @@ class BookingController extends Controller
         $showtime = Showtime::findOrFail($showtime_id);
         $seats = Seat::where('room_id', $showtime->room_id)->get();
 
-        return view('booking.create', compact('showtime', 'seats'));
+        return view('Booking.create', compact('showtime', 'seats'));
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::with(['showtime', 'seat'])->findOrFail($id);
-        return view('booking.show', compact('booking'));
+        return view('Booking.show', compact('booking'));
     }
     public function destroy($id)
     {

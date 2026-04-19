@@ -9,7 +9,7 @@ use App\Models\Seat;
 
 class Room extends Model
 {
-    protected $table = 'room'; 
+    protected $table = 'rooms'; 
 
     protected $fillable = [
         'cinema_id',

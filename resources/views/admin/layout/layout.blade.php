@@ -2,124 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CineBook Admin</title>
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Icons -->
+    <title>Cinebook Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0f1117;
-            color: white;
-        }
-
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            background: #111827;
-            position: fixed;
-            padding: 20px;
-        }
-
-        .sidebar h4 {
-            color: #facc15;
-            font-weight: bold;
-        }
-
-        .sidebar a {
-            display: block;
-            color: #ccc;
-            padding: 10px;
-            margin-top: 10px;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: 0.3s;
-        }
-
-        .sidebar a:hover,
-        .sidebar a.active {
-            background: #1f2937;
-            color: #fff;
-        }
-
-        .content {
-            margin-left: 260px;
-            padding: 25px;
-        }
-
-        .card-dark {
-            background: #1f2937;
-            border-radius: 15px;
-            padding: 15px;
-        }
-
-        .btn-yellow {
-            background: #facc15;
-            border: none;
-            color: black;
-            font-weight: bold;
-        }
-
-        table img {
-            border-radius: 6px;
-        }
+        body { background-color: #0b0f14; color: white; font-family: 'Poppins', sans-serif; }
+        .card-dark { background: #11161c; border-radius: 12px; padding: 16px; }
+        .btn-yellow { background: #facc15; border: none; color: black; font-weight: bold; }
+        .table-dark { background: transparent; }
+        .table-dark td, .table-dark th { color: #ccc; border-color: #1f2937; }
     </style>
 </head>
+<body class="min-h-screen flex">
 
-<body>
+{{-- SIDEBAR --}}
+<aside class="w-64 bg-[#0f141b] border-r border-gray-800 flex flex-col min-h-screen fixed top-0 left-0 z-40">
+    <div class="p-6">
+        <h1 class="text-red-500 font-bold text-xl">CINEBOOK ADMIN</h1>
+    </div>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-    <h4>🎬 CINEBOOK</h4>
+    <nav class="flex-1 px-4 space-y-1 text-sm">
+        <a href="/admin/dashboard" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/dashboard') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-home w-4"></i> Dashboard
+        </a>
+        <a href="/admin/movies" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/movies*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-film w-4"></i> Movies
+        </a>
+        <a href="/admin/showtimes" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/showtimes*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-clock w-4"></i> Showtimes
+        </a>
+        <a href="/admin/reviews" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/reviews*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-star w-4"></i> Reviews
+        </a>
+        <a href="/admin/cinemas" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/cinemas*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-building w-4"></i> Cinemas
+        </a>
+    </nav>
 
-    <a href="/admin/dashboard"
-       class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
-        <i class="fa fa-home"></i> Dashboard
-    </a>
-
-    <a href="/admin/movies"
-       class="{{ request()->is('admin/movies*') ? 'active' : '' }}">
-        <i class="fa fa-film"></i> Movies
-    </a>
-
-    <a href="/admin/showtimes"
-       class="{{ request()->is('admin/showtimes*') ? 'active' : '' }}">
-        <i class="fa fa-clock"></i> Showtimes
-    </a>
-
-    <a href="/admin/reviews"
-       class="{{ request()->is('admin/reviews*') ? 'active' : '' }}">
-        <i class="fa fa-star"></i> Reviews
-    </a>
-
-    <div style="position: absolute; bottom: 20px; width: calc(250px - 40px);">
+    <div class="p-4 border-t border-gray-800">
         <form method="POST" action="{{ route('admin.logout') }}">
             @csrf
-            <button type="submit" style="display:block; width:100%; background:#dc2626; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer; text-align:left;">
-                <i class="fa fa-sign-out-alt"></i> Logout
+            <button type="submit" class="w-full text-left text-sm text-gray-400 hover:text-red-400 transition flex items-center gap-2">
+                <i class="fa fa-sign-out-alt w-4"></i> Log Out
             </button>
         </form>
     </div>
-</div>
+</aside>
 
-<!-- CONTENT -->
-<div class="content">
+{{-- CONTENT --}}
+<main class="ml-64 flex-1 p-8 min-h-screen">
 
-    {{-- THÔNG BÁO --}}
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger mb-4">{{ session('error') }}</div>
     @endif
 
-    {{-- NỘI DUNG --}}
     @yield('content')
 
-</div>
+</main>
 
 </body>
 </html>

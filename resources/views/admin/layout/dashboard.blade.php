@@ -2,70 +2,54 @@
 
 @section('content')
 
-<h2 class="text-2xl font-bold text-white mb-6">🎬 Admin Dashboard</h2>
-
-<!-- CARDS -->
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-    <!-- Movies -->
-    <div class="card-dark text-center">
-        <div class="icon-box icon-blue mx-auto mb-3">🎬</div>
-        <p class="text-gray-400">Movies</p>
-        <h2 class="text-2xl font-bold">{{ $totalMovies ?? 0 }}</h2>
-    </div>
-
-    <!-- Showtimes -->
-    <div class="card-dark text-center">
-        <div class="icon-box icon-green mx-auto mb-3">⏰</div>
-        <p class="text-gray-400">Showtimes</p>
-        <h2 class="text-2xl font-bold">{{ $totalShowtimes ?? 0 }}</h2>
-    </div>
-
-    <!-- Reviews -->
-    <div class="card-dark text-center">
-        <div class="icon-box icon-yellow mx-auto mb-3">⭐</div>
-        <p class="text-gray-400">Reviews</p>
-        <h2 class="text-2xl font-bold">{{ $totalReviews ?? 0 }}</h2>
-    </div>
-
-    <!-- Rating -->
-    <div class="card-dark text-center">
-        <div class="icon-box icon-red mx-auto mb-3">📊</div>
-        <p class="text-gray-400">Avg Rating</p>
-        <h2 class="text-2xl font-bold">
-            {{ $avgRating ? number_format($avgRating,1) : 0 }}
-        </h2>
-    </div>
-
+<div class="flex justify-between items-center mb-8">
+    <h2 class="text-2xl font-bold">🎬 Dashboard</h2>
+    <span class="text-gray-400 text-sm">{{ session('admin_email') }}</span>
 </div>
 
-
-<!-- TOP MOVIES -->
-<div class="mt-8">
-
-    <h3 class="text-xl font-semibold text-white mb-4">🔥 Top Movies</h3>
-
-    @foreach($topMovies as $movie)
-    <div class="card-dark flex items-center justify-between mb-3">
-
-        <div class="flex items-center">
-            <img src="https://via.placeholder.com/60x80" class="rounded mr-3">
-
-            <div>
-                <p class="font-semibold">{{ $movie->title }}</p>
-                <p class="text-gray-400 text-sm">
-                    ⭐ {{ number_format($movie->reviews_avg_rating,1) }}
-                </p>
-            </div>
-        </div>
-
-        <span class="bg-yellow-400 text-black px-3 py-1 rounded-lg text-sm">
-            Hot
-        </span>
-
+{{-- STATS --}}
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="card-dark text-center">
+        <p class="text-gray-400 text-sm">TOTAL MOVIES</p>
+        <h2 class="text-2xl font-bold mt-1">{{ $totalMovies ?? 0 }}</h2>
     </div>
-    @endforeach
+    <div class="card-dark text-center">
+        <p class="text-gray-400 text-sm">SHOWTIMES</p>
+        <h2 class="text-2xl font-bold mt-1">{{ $totalShowtimes ?? 0 }}</h2>
+    </div>
+    <div class="card-dark text-center">
+        <p class="text-gray-400 text-sm">REVIEWS</p>
+        <h2 class="text-2xl font-bold mt-1">{{ $totalReviews ?? 0 }}</h2>
+    </div>
+    <div class="card-dark text-center">
+        <p class="text-gray-400 text-sm">AVG RATING</p>
+        <h2 class="text-2xl font-bold mt-1 text-cyan-400">{{ $avgRating ? number_format($avgRating, 1) : '—' }}</h2>
+    </div>
+</div>
 
+{{-- TOP MOVIES --}}
+<div class="card-dark">
+    <h3 class="font-bold mb-4">🏆 Top Rated Movies</h3>
+    <table class="table table-dark table-bordered text-center align-middle w-full">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Avg Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($topMovies ?? [] as $movie)
+            <tr>
+                <td>{{ $movie->title }}</td>
+                <td>{{ $movie->genre ?? '—' }}</td>
+                <td class="text-yellow-400">{{ $movie->reviews_avg_rating ? number_format($movie->reviews_avg_rating, 1) : '—' }}</td>
+            </tr>
+            @empty
+            <tr><td colspan="3" class="text-gray-500">No movies yet.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
 </div>
 
 @endsection

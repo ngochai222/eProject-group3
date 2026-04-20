@@ -55,7 +55,9 @@ class MovieController extends Controller
             $q->where('start_time', '>=', now())->orderBy('start_time');
         }])->findOrFail($id);
 
-        return view('show-time-detail', compact('movie'));
+        $cinemas = \DB::table('cinema')->select('cinema_id', 'cinema_name', 'cinema_address')->get();
+
+        return view('show-time-detail', compact('movie', 'cinemas'));
     }
 
     public function showtime()

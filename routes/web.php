@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\MovieController as AdminMovieController;
 use App\Http\Controllers\Admin\ShowtimeController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CinemaController as AdminCinemaController;
 
 // Public
 Route::get('/', [MovieController::class, 'index'])->name('home');
@@ -50,4 +51,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('movies', AdminMovieController::class);
     Route::resource('showtimes', ShowtimeController::class);
     Route::resource('reviews', ReviewController::class);
+    Route::get('/cinemas', [AdminCinemaController::class, 'index'])->name('cinemas.index');
+    Route::post('/cinemas', [AdminCinemaController::class, 'store'])->name('cinemas.store');
+    Route::put('/cinemas/{id}', [AdminCinemaController::class, 'update'])->name('cinemas.update');
+    Route::delete('/cinemas/{id}', [AdminCinemaController::class, 'destroy'])->name('cinemas.destroy');
 });

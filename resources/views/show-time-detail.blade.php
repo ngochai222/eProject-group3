@@ -24,6 +24,27 @@
         </div>
     </div>
 
+    {{-- Select Cinema --}}
+    <h3 class="text-lg font-bold uppercase tracking-widest mb-4 text-[#E50914]">Select Cinema</h3>
+
+    @if(isset($cinemas) && $cinemas->count() > 0)
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+        @foreach($cinemas as $cinema)
+        <div class="cinema-card bg-white/5 border border-white/10 hover:border-[#E50914] rounded-2xl p-4 cursor-pointer transition"
+             onclick="selectCinema(this, {{ $cinema->cinema_id }})">
+            <h4 class="font-bold text-white mb-1">{{ $cinema->cinema_name }}</h4>
+            <p class="text-sm text-gray-400 flex items-center gap-1">
+                📍 {{ $cinema->cinema_address }}
+            </p>
+        </div>
+        @endforeach
+    </div>
+    @else
+    <div class="bg-white/5 rounded-2xl p-6 text-center text-gray-500 mb-10">
+        No cinemas available.
+    </div>
+    @endif
+
     {{-- Showtimes --}}
     <h3 class="text-lg font-bold uppercase tracking-widest mb-4 text-[#E50914]">Available Showtimes</h3>
 
@@ -56,6 +77,15 @@
     @endif
 
 </div>
+
+<script>
+function selectCinema(el, id) {
+    document.querySelectorAll('.cinema-card').forEach(c => {
+        c.classList.remove('border-[#E50914]', 'bg-[#E50914]/10');
+    });
+    el.classList.add('border-[#E50914]', 'bg-[#E50914]/10');
+}
+</script>
 
 </body>
 </html>

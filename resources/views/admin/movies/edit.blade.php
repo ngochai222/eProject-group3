@@ -52,7 +52,7 @@
         <label>Trailer</label>
         <input type="file" name="trailer" class="form-control" accept="video/*">
         @if($movie->trailer)
-            <a href="{{ asset('uploads/'.$movie->trailer) }}" target="_blank" class="btn btn-sm btn-info mt-2">▶ Current Trailer</a>
+            <a href="{{ $movie->trailer }}" target="_blank" class="btn btn-sm btn-info mt-2">▶ Current Trailer</a>
         @endif
     </div>
 

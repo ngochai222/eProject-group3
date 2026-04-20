@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Cinebook Login</title>
 <!-- Tailwind CSS CDN -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <style data-purpose="custom-fonts">
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -39,6 +40,9 @@ input:focus {
 <div class="w-full max-w-sm space-y-8">
 
 <div class="text-center md:text-left">
+<a href="{{ url('/') }}" class="inline-flex items-center text-gray-400 hover:text-white mb-4 transition">
+    <span class="material-icons" style="font-size:32px;">arrow_back</span>
+</a>
 <h1 class="text-3xl md:text-4xl font-bold tracking-tight">
             WELCOME TO <br/>
 <span class="text-[#ef4444]">CINEBOOK</span>

@@ -37,33 +37,7 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Top App Bar -->
-    <header class="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-md px-4 md:px-6 py-2">
-        <div class="flex items-center justify-between gap-4 md:gap-6 h-12 md:h-14">
-            <div class="flex items-center gap-3">
-                <button class="p-2 hover:bg-white/10 rounded-lg transition md:hidden">
-                    <span class="material-icons text-[#E9BCB6]">menu</span>
-                </button>
-                <h1 class="text-xl font-bold italic text-[#E50914] tracking-tighter whitespace-nowrap">CINEBOOK</h1>
-            </div>
-            <nav class="hidden md:flex items-center gap-4 flex-1 justify-center">
-                <a href="{{ route('movies') }}" class="text-[#E50914] text-xs uppercase tracking-widest font-bold hover:text-white transition">Movies</a>
-                <a href="{{ route('cinemas') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Cinemas</a>
-                <a href="{{ route('booking.index') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Booking</a>
-                <a href="{{ route('showtimes') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Show Time</a>
-                <a href="{{ route('contact') }}" class="text-[#E9BCB6]/70 text-xs uppercase tracking-widest font-bold hover:text-white transition">Contact</a>
-            </nav>
-            <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
-                <span class="material-icons text-red text-[20px]">confirmation_number</span>
-            </button>
-            <a href="/login">
-                 <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
-                
-                    <span class="material-icons text-white text-[20px]">person</span>
-                 </button>
-             </a>
-        </div>
-    </header>
+    @include('components.header')
 
     <main class="flex-1 pt-16 md:pt-18">
 
@@ -138,6 +112,41 @@
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
                 <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
                     {{ $movie['genre'] }} • {{ $movie['duration'] }}
+                </p>
+            </div>
+            @endforeach
+        </div>
+    </section>
+
+    <!-- Coming Soon Section -->
+    <section id="coming-soon" class="mt-10 md:mt-12 px-4 md:px-6">
+        <div class="flex justify-between items-start md:items-center gap-4 mb-6">
+            <div>
+                <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Coming Soon</h3>
+            </div>
+            <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
+                <span class="hidden sm:inline">View All</span>
+                <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
+            @foreach($comingSoonMovies as $movie)
+            <div class="group cursor-pointer">
+                <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
+                    <img
+                        src="{{ $movie['image'] }}"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="{{ $movie['title'] }}"
+                        loading="lazy"
+                    >
+                    <div class="absolute top-2 left-2 bg-[#E50914] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-full">
+                        {{ $movie['release_date'] }}
+                    </div>
+                </div>
+                <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
+                <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
+                    {{ $movie['genre'] }}
                 </p>
             </div>
             @endforeach

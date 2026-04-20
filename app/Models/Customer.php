@@ -2,18 +2,54 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Booking;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
-    protected $table = 'customer'; 
+    use Notifiable;
+
+    protected $table = 'customer';
+    protected $primaryKey = 'customer_id';
 
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+        'customer_password',
+        'customer_date_of_birth',
+        'customer_gender',
+        'customer_avatar',
+        'customer_favorite',
+        'customer_address',
     ];
+
+    protected $hidden = [
+        'customer_password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'customer_date_of_birth' => 'date',
+    ];
+
+    // Laravel dùng cái này để retrieve user từ session
+    public function getAuthIdentifierName()
+    {
+        return 'customer_id';
+    }
+
+    // Laravel dùng cái này để lưu vào session
+    public function getAuthIdentifier()
+    {
+        return $this->customer_id;
+    }
+
+    // Laravel dùng cái này để verify password
+    public function getAuthPassword()
+    {
+        return $this->customer_password;
+    }
 
     public function bookings()
     {

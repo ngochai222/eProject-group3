@@ -44,8 +44,8 @@
     </div>
 
     <div class="mb-3">
-        <label>Trailer</label>
-        <input type="file" name="trailer" class="form-control" accept="video/*">
+        <label>Trailer URL</label>
+        <input type="text" name="trailer" class="form-control" placeholder="https://youtube.com/...">
     </div>
 
     <button class="btn btn-warning">Save</button>

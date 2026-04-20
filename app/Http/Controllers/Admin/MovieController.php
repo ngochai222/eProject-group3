@@ -30,7 +30,7 @@ class MovieController extends Controller
             'duration'     => 'nullable|integer',
             'release_date' => 'nullable|date',
             'poster'       => 'nullable|image',
-            'trailer'      => 'nullable|file|mimes:mp4,mov,avi,webm',
+            'trailer'      => 'nullable|string',
         ]);
 
         if ($request->hasFile('poster')) {
@@ -38,13 +38,6 @@ class MovieController extends Controller
             $name = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $name);
             $data['poster'] = $name;
-        }
-
-        if ($request->hasFile('trailer')) {
-            $file = $request->file('trailer');
-            $name = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $name);
-            $data['trailer'] = $name;
         }
 
         Movie::create($data);

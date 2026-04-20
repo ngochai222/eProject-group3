@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
 <body class="bg-black text-white">
@@ -16,6 +17,11 @@
 
     <!-- PROFILE HEADER -->
     <div class="text-center pt-10">
+        <div class="px-6 pb-2 text-left">
+            <a href="{{ url('/') }}" class="inline-flex items-center text-gray-400 hover:text-white transition">
+                <span class="material-icons" style="font-size:32px;">arrow_back</span>
+            </a>
+        </div>
         @php
             $avatarUrl = $user->customer_avatar
                 ? (Str::startsWith($user->customer_avatar, ['http://', 'https://'])

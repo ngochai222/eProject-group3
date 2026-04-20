@@ -19,9 +19,9 @@
                class="{{ request()->routeIs('cinema') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Cinemas
             </a>
-            <a href="{{ route('index.blade.php') }}"
-               class="{{ request()->routeIs('booking') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
-                Booking
+            <a href="#coming-soon"
+               class="{{ request()->routeIs('booking*') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
+                Coming Soon
             </a>
             <a href="{{ route('admin.showtimes.index') }}"
                class="{{ request()->routeIs('admin.showtimes.index') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
@@ -33,9 +33,6 @@
             </a>
         </nav>
 
-        <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
-            <span class="material-icons text-white text-[20px]">confirmation_number</span>
-        </button>
 
         @if(auth()->guard('customer')->check())
             <div class="flex items-center gap-2">

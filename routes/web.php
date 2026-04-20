@@ -10,6 +10,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ForgotpwController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Admin\MovieController as AdminMovieController;
 use App\Http\Controllers\Admin\ShowtimeController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Admin\AdminController;
 
 // Trang chủ
 Route::get('/', [MovieController::class, 'index'])->name('home');
+Route::get('/cinema', [MovieController::class, 'cinema'])->name('cinema');
 
 // Public pages
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
@@ -36,6 +38,12 @@ Route::post('/forgot-password', [ForgotpwController::class, 'sendResetLinkEmail'
 
 Route::get('/register', [RegisterController::class, 'showRegister'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+
+// Customer profile (requires login)
+Route::middleware('auth:customer')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // User routes
 Route::resource('tickets', TicketController::class);

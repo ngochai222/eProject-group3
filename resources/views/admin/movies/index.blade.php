@@ -39,7 +39,7 @@
                 </td>
                 <td>
                     @if($movie->trailer)
-                        <a href="{{ asset('uploads/'.$movie->trailer) }}" target="_blank" class="btn btn-sm btn-info">▶ Play</a>
+                        <a href="{{ $movie->trailer }}" target="_blank" class="btn btn-sm btn-info">▶ Play</a>
                     @else
                         <span class="text-muted">—</span>
                     @endif

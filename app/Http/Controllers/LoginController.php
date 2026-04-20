@@ -28,18 +28,7 @@ class LoginController extends Controller
 
     if (Auth::guard('customer')->attempt(['customer_email' => $credentials['username'], 'password' => $credentials['password']], $remember)) {
         $request->session()->regenerate();
-        
-        $user = Auth::guard('customer')->user();
-        $customerName = $user->customer_name;
-        
-        // Log for debugging
-        Log::info('Customer logged in:', [
-            'customer_id' => $user->customer_id,
-            'customer_email' => $user->customer_email,
-            'session_id' => session()->getId(),
-        ]);
-        
-        return redirect()->route('home')->with('success', "Welcome back, $customerName!");
+        return redirect()->route('home')->with('success', 'Welcome back!');
     }
 
     Log::warning('Login attempt failed:', [

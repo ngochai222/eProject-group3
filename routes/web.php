@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\AdminController;
 // Trang chủ
 Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('/cinema', [MovieController::class, 'cinema'])->name('cinema');
+Route::get('/movie/{index}', [MovieController::class, 'detail'])->name('movie.detail');
 
 // Public pages
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');

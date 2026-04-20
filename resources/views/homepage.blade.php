@@ -99,8 +99,9 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
-            @foreach($hotMovies as $movie)
+            @foreach($hotMovies as $index => $movie)
             <div class="group cursor-pointer">
+                <a href="{{ route('movie.detail', $index) }}">
                 <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
                     <img
                         src="{{ $movie['image'] }}"
@@ -109,6 +110,7 @@
                         loading="lazy"
                     >
                 </div>
+                </a>
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
                 <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
                     {{ $movie['genre'] }} • {{ $movie['duration'] }}
@@ -131,8 +133,9 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
-            @foreach($comingSoonMovies as $movie)
+            @foreach($comingSoonMovies as $index => $movie)
             <div class="group cursor-pointer">
+                <a href="{{ route('movie.detail', $index + 4) }}">
                 <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
                     <img
                         src="{{ $movie['image'] }}"
@@ -144,6 +147,7 @@
                         {{ $movie['release_date'] }}
                     </div>
                 </div>
+                </a>
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
                 <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
                     {{ $movie['genre'] }}

@@ -2,93 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cinebook</title>
+    <title>Cinebook Showtime</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white font-sans">
+<body class="bg-black text-white">
 
 @include('components.header')
 
-<div class="pt-16">
-<div class="grid grid-cols-4 gap-10 px-10 py-10">
-    <img src="{{ $movie['image'] }}" class="w-full rounded">
+<div class="pt-20 px-6 md:px-10 pb-16">
 
-    <div class="col-span-3">
-        <h2 class="text-2xl font-bold mb-2">{{ $movie['title'] }}</h2>
-        <div class="flex gap-4 text-sm text-gray-400 mb-6">
-            <span>🎬 {{ $movie['genre'] }}</span>
-            @if(isset($movie['duration']))<span>⏱ {{ $movie['duration'] }}</span>@endif
+    <h2 class="text-2xl md:text-3xl font-black uppercase italic mb-8">Show Times</h2>
+
+    @if($showtimes->isEmpty())
+        <div class="text-center text-gray-500 py-20">
+            <p class="text-lg">No showtimes available at the moment.</p>
         </div>
+    @else
+        @foreach($showtimes as $date => $items)
+            <div class="mb-10">
+                <h3 class="text-[#E50914] font-bold uppercase tracking-widest text-sm mb-4">
+                    {{ \Carbon\Carbon::parse($date)->format('l, F j, Y') }}
+                </h3>
 
-        <!-- Date -->
-        <h3 class="mb-2">Select a date</h3>
-        <div class="flex gap-3 mb-6">
-            @foreach(range(12,17) as $day)
-                <div class="bg-yellow-400 text-black px-4 py-3 rounded text-center">
-                    <p class="font-bold">{{ $day }}</p>
-                    <p>April</p>
+                <div class="space-y-6">
+                    @foreach($items as $showtime)
+                    <div class="flex gap-6 bg-white/5 rounded-2xl p-4 border border-white/10">
+                        {{-- Poster --}}
+                        <img
+                            src="{{ $showtime->movie->poster ? asset('uploads/' . $showtime->movie->poster) : 'https://via.placeholder.com/100x140?text=No+Image' }}"
+                            class="w-20 h-28 rounded-lg object-cover flex-shrink-0"
+                            alt="{{ $showtime->movie->title }}"
+                        >
+
+                        <div class="flex-1">
+                            <h4 class="text-lg font-bold mb-1">{{ $showtime->movie->title }}</h4>
+                            <div class="flex gap-4 text-sm text-gray-400 mb-3">
+                                @if($showtime->movie->genre)
+                                    <span>🎬 {{ $showtime->movie->genre }}</span>
+                                @endif
+                                @if($showtime->movie->duration)
+                                    <span>⏱ {{ $showtime->movie->duration }} min</span>
+                                @endif
+                            </div>
+
+                            <div class="flex flex-wrap gap-3">
+                                <a href="{{ route('movie.detail', $showtime->movie->id) }}"
+                                   class="bg-gray-800 hover:bg-[#E50914] px-4 py-2 rounded-lg text-sm font-bold transition">
+                                    {{ \Carbon\Carbon::parse($showtime->start_time)->format('H:i') }}
+                                    @if($showtime->end_time)
+                                        – {{ \Carbon\Carbon::parse($showtime->end_time)->format('H:i') }}
+                                    @endif
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
-            @endforeach
-        </div>
-
-        <!-- Cinema -->
-        <h3 class="mb-2">Select a cinema</h3>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="border border-yellow-400 p-4 rounded">
-                <h4 class="font-bold">Grand IMAX Plaza</h4>
-                <p class="text-sm text-gray-400">Downtown</p>
-                <div class="flex gap-2 mt-2">
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">IMAX</span>
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">2D</span>
-                </div>
             </div>
+        @endforeach
+    @endif
 
-            <div class="border border-yellow-400 p-4 rounded">
-                <h4 class="font-bold">Downtown Boutique</h4>
-                <p class="text-sm text-gray-400">City Center</p>
-                <div class="flex gap-2 mt-2">
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">2D</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Showtime -->
-        <h3 class="mb-2">IMAX 2D</h3>
-        <div class="flex gap-4 mb-6">
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>11:30 AM</p>
-                <p class="text-yellow-400">$22.50</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded opacity-50">
-                <p>06:00 PM</p>
-                <p class="text-red-500">Sold Out</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>07:45 PM</p>
-                <p class="text-yellow-400">$22.50</p>
-            </div>
-        </div>
-
-        <!-- VIP -->
-        <h3 class="mb-2">VIP Lounge</h3>
-        <div class="flex gap-4 mb-6">
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>05:30 PM</p>
-                <p class="text-yellow-400">$35.00</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>08:00 PM</p>
-                <p class="text-yellow-400">$35.00</p>
-            </div>
-        </div>
-
-        <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold">
-            CHOOSE SEATS
-        </button>
-    </div>
 </div>
 
 </body>

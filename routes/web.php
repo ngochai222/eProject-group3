@@ -20,6 +20,7 @@ Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('/cinema', [MovieController::class, 'cinema'])->name('cinema');
 Route::get('/movie/{index}', [MovieController::class, 'detail'])->name('movie.detail');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
+Route::get('/showtime', [MovieController::class, 'showtime'])->name('showtime');
 
 // Auth
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class LoginController extends Controller
 {
     public function showLogin() {
-        return view('layout.customer.login');
+        return view('login');
     }
 
     public function login(Request $request) {

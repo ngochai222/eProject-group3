@@ -8,8 +8,24 @@ class MovieController extends Controller
 {
     public function index()
     {
-        $hotMovies = $this->getHotMovies();
-        $comingSoonMovies = $this->getComingSoonMovies();
+        // Lấy từ DB, ưu tiên DB — fallback về hardcode nếu DB trống
+        $dbMovies = \App\Models\Movie::latest()->get();
+
+        if ($dbMovies->count() > 0) {
+            $hotMovies = $dbMovies->map(fn($m) => [
+                'id'           => $m->id,
+                'title'        => $m->title,
+                'genre'        => $m->genre ?? '',
+                'duration'     => $m->release_date ?? '',
+                'release_date' => $m->release_date ?? '',
+                'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+            ])->toArray();
+            $comingSoonMovies = [];
+        } else {
+            $hotMovies = $this->getHotMovies();
+            $comingSoonMovies = $this->getComingSoonMovies();
+        }
+
         return view('homepage', compact('hotMovies', 'comingSoonMovies'));
     }
 
@@ -18,11 +34,40 @@ class MovieController extends Controller
         return view('cinema');
     }
 
+    public function showtime()
+    {
+        $showtimes = \App\Models\Showtime::with('movie')
+            ->where('start_time', '>=', now())
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy(fn($s) => \Carbon\Carbon::parse($s->start_time)->format('Y-m-d'));
+
+        return view('showtime', compact('showtimes'));
+    }
+
     public function detail($index)
     {
-        $allMovies = array_merge($this->getHotMovies(), $this->getComingSoonMovies());
-        $movie = $allMovies[$index] ?? abort(404);
-        return view('showtime', compact('movie'));
+        // Thử tìm theo ID trong DB trước
+        $dbMovie = \App\Models\Movie::find($index);
+        if ($dbMovie) {
+            $movie = [
+                'id'           => $dbMovie->id,
+                'title'        => $dbMovie->title,
+                'genre'        => $dbMovie->genre ?? '',
+                'duration'     => $dbMovie->release_date ?? '',
+                'release_date' => $dbMovie->release_date ?? '',
+                'cast'         => $dbMovie->cast ?? '',
+                'description'  => $dbMovie->description ?? '',
+                'trailer'      => $dbMovie->trailer ?? '',
+                'image'        => $dbMovie->poster ? asset('uploads/' . $dbMovie->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+            ];
+        } else {
+            // Fallback hardcode
+            $allMovies = array_merge($this->getHotMovies(), $this->getComingSoonMovies());
+            $movie = $allMovies[$index] ?? abort(404);
+        }
+
+        return view('show-time-detail', compact('movie'));
     }
 
     private function getHotMovies()

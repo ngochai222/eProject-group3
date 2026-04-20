@@ -23,8 +23,8 @@
                class="{{ request()->routeIs('booking*') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Coming Soon
             </a>
-            <a href="{{ route('admin.showtimes.index') }}"
-               class="{{ request()->routeIs('admin.showtimes.index') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
+            <a href="{{ route('showtime') }}"
+               class="{{ request()->routeIs('showtime') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Show Times  
             </a>
             <a href="#"

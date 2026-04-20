@@ -101,7 +101,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
             @foreach($hotMovies as $index => $movie)
             <div class="group cursor-pointer">
-                <a href="{{ route('movie.detail', $index) }}">
+                <a href="{{ route('movie.detail', $movie['id'] ?? $index) }}">
                 <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
                     <img
                         src="{{ $movie['image'] }}"
@@ -151,6 +151,38 @@
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
                 <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
                     {{ $movie['genre'] }}
+                </p>
+            </div>
+            @endforeach
+        </div>
+    </section>
+    <section class="mt-10 md:mt-12 px-4 md:px-6">
+        <div class="flex justify-between items-start md:items-center gap-4 mb-6">
+            <div>
+                <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Currently Showing</h3>
+            </div>
+            <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
+                <span class="hidden sm:inline">View All</span>
+                <span class="material-icons text-sm">arrow_forward</span>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
+            @foreach($hotMovies as $index => $movie)
+            <div class="group cursor-pointer">
+                <a href="{{ route('movie.detail', $movie['id'] ?? $index) }}">
+                <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
+                    <img
+                        src="{{ $movie['image'] }}"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        alt="{{ $movie['title'] }}"
+                        loading="lazy"
+                    >
+                </div>
+                </a>
+                <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
+                <p class="text-[#E9BCB6]/50 text-[10px] md:text-xs font-bold uppercase tracking-widest line-clamp-1">
+                    {{ $movie['genre'] }} • {{ $movie['duration'] }}
                 </p>
             </div>
             @endforeach

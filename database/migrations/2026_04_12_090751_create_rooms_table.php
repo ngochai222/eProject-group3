@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-
-             $table->string('rooms_number', 10);
-
-             $table->foreignId('cinema_id')
-             ->constrained()
-            ->cascadeOnDelete();
-            
-            $table->string('name');
-            $table->integer('capacity');
-
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('rooms')) {
+            Schema::create('rooms', function (Blueprint $table) {
+                $table->id();
+                $table->string('rooms_number', 10);
+                $table->foreignId('cinema_id')
+                    ->constrained('cinema')
+                    ->cascadeOnDelete();
+                $table->string('name');
+                $table->integer('capacity');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

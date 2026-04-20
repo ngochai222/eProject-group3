@@ -11,7 +11,7 @@ class MovieController extends Controller
 {
     public function index()
     {
-        $movies = Movie::all();
+        $movies = Movie::with('showtimes')->withAvg('reviews', 'rating')->get();
         return view('admin.movies.index', compact('movies'));
     }
 

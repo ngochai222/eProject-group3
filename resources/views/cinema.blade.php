@@ -115,54 +115,22 @@
 </section>
 <!-- Cinema List (Asymmetric Bento-inspired Layout) -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-<!-- Card 1 (Hanoi Highlight) -->
+@forelse($cinemas as $cinema)
 <div class="group relative overflow-hidden rounded-3xl bg-surface-container-low border border-white/5 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-primary-container/10">
 <div class="relative h-64 w-full">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="luxury cinema interior with deep red velvet seating and cinematic spotlight lighting in a modern grand theater lobby" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE33ZEIhZQAV3SHcQzMs_VeHb_hGcSazMvdfjPFMX6n2B0I9JX_kjYygHKm2f2AIT150_4v28n0ERdM6J9-glVU8tRxusiWhZFzNtm9FWIF4uokaxi_cxGzz5VMHQAcfkMwnXhb4hmVKyM0KgOrv6YCCT52KRCIuSN_8vixTyRnQxtAoPLbL5fxgEo4fvCn0ZqKBaEXb0RxkcCT-gFwk0Wt2ZxnbdAbtC_cwMNdAVPqhW6OPv5n-X0cdQ0VQW5OUmBEG0KAVlZ"/>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+     src="{{ $cinema->cinema_image ? asset('uploads/'.$cinema->cinema_image) : 'https://lh3.googleusercontent.com/aida-public/AB6AXuDE33ZEIhZQAV3SHcQzMs_VeHb_hGcSazMvdfjPFMX6n2B0I9JX_kjYygHKm2f2AIT150_4v28n0ERdM6J9-glVU8tRxusiWhZFzNtm9FWIF4uokaxi_cxGzz5VMHQAcfkMwnXhb4hmVKyM0KgOrv6YCCT52KRCIuSN_8vixTyRnQxtAoPLbL5fxgEo4fvCn0ZqKBaEXb0RxkcCT-gFwk0Wt2ZxnbdAbtC_cwMNdAVPqhW6OPv5n-X0cdQ0VQW5OUmBEG0KAVlZ' }}"
+     alt="{{ $cinema->cinema_name }}"/>
 <div class="absolute inset-0 cinematic-gradient"></div>
-<div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary-container text-[10px] font-bold tracking-widest text-white rounded-md uppercase">IMAX</span>
-<span class="px-3 py-1 bg-surface-bright/80 backdrop-blur-md text-[10px] font-bold tracking-widest text-white rounded-md uppercase">Dolby Atmos</span>
-</div>
-</div>
 </div>
 <div class="p-6 space-y-3">
 <div class="flex justify-between items-start">
 <div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Sense Cityscape</h3>
+<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">{{ $cinema->cinema_name }}</h3>
 <p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
 <span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                1, Hoa Binh, Tan An, Ninh Kieu, Can Tho
-                            </p>
-</div>
-<span class="material-symbols-outlined text-primary-container" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
-</div>
-<div class="pt-4 flex items-center justify-between">
-<button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
-</div>
-</div>
-</div>
-<!-- Card 2 (HCMC Landmark) -->
-<div class="group relative overflow-hidden rounded-3xl bg-surface-container-low border border-white/5 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-primary-container/10">
-<div class="relative h-64 w-full">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="ultra modern futuristic cinema lobby with neon red accents architectural curves and digital displays in Ho Chi Minh City" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2McJZsKb9PyWLuD6ndDfnIYW7kZFRC1E15ZeeZH-OfU5GWh1Efs7RBnIiEam86viE754aZ52Kr-OJgnig3N8LAordqcjceHexhi3mDop6_9aHE8pGcnioWhfw98k-xY6Zwomk0OIGHH2m__MI0DbtPaxMnnjDVDHL3Ya69YdSjylx4jR3PJSkNpdQ5QbkduQuW8dmaZasCwBsxx7zasm1Z5VfYYqIqf-4NhVHIOKmvNkE1dPT6ijBmRgh5RAdThR_oFrlLht-"/>
-<div class="absolute inset-0 cinematic-gradient"></div>
-<div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary-container text-[10px] font-bold tracking-widest text-white rounded-md uppercase">Gold Class</span>
-<span class="px-3 py-1 bg-surface-bright/80 backdrop-blur-md text-[10px] font-bold tracking-widest text-white rounded-md uppercase">4DX</span>
-</div>
-</div>
-</div>
-<div class="p-6 space-y-3">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">LOTTE Cinema Cần Thơ Ninh Kiều</h3>
-<p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                                84 Mau Than, Cai Khe, Can Tho
-                            </p>
+{{ $cinema->cinema_address }}
+</p>
 </div>
 </div>
 <div class="pt-4 flex items-center justify-between">
@@ -170,59 +138,9 @@
 </div>
 </div>
 </div>
-<!-- Card 3 (Da Nang Coastal) -->
-<div class="group relative overflow-hidden rounded-3xl bg-surface-container-low border border-white/5 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-primary-container/10">
-<div class="relative h-64 w-full">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="elegant boutique cinema entrance with vintage movie posters and warm golden ambient lighting in Da Nang city" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiw8jFASKV1g8EDRUuUldMidz7lPd9aj0gp_uzi92ENygcVC15xWrnnrjJv_HamSk-vqnDR0dUVCWnKKeUmfli6DI6ksZc6F-BCX1Ufv4HeV8Ex8X_U9roh7ZL87UX_xqpmWsFSJZAuGJzHl1uZccsiwlsgtSZMnHDO7qIfmIzQ-sPtrSD-Kko-2I6xO0UUsXONS-VZKr_V36w3AxHdJcBzIWmM0vhzVzrM2fnxg-gYZrMBSdea6L-EO2-mEuaB49NF6NcwEzf"/>
-<div class="absolute inset-0 cinematic-gradient"></div>
-<div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary-container text-[10px] font-bold tracking-widest text-white rounded-md uppercase">Dolby Atmos</span>
-</div>
-</div>
-</div>
-<div class="p-6 space-y-3">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Vincom Hùng Vương</h3>
-<p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                             02 Hung Vuong, Thoi Binh, Ninh Kieu, Can Tho
-                            </p>
-</div>
-</div>
-<div class="pt-4 flex items-center justify-between">
-<button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
-</div>
-</div>
-</div>
-<!-- Card 4 (Hanoi Westlake) -->
-<div class="group relative overflow-hidden rounded-3xl bg-surface-container-low border border-white/5 shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-primary-container/10">
-<div class="relative h-64 w-full">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="wide shot of a modern cinematic theater room with plush seating rows and soft red floor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh6yz0ZdWrlK7mbXR2GS7-oUgf3jdjzvCIfl9xWEU-R6p2WGzuo9jBG2pYnCfcHkIT909XiK5dhTpxZToNhgRnG0-914fFrz96oAOR9dVGVCkDFuPu4qjxDKXm3paQOrr8-01O2qSFb87o0MplNTDZ3i2nTTPuCs5C-l7EHf8sL-KeYjvW14CCJ7Q23DG0taTHX4bMSqpc6eol8R7x8QhwPL8ZCYZ77GDPaBHTL1mYlltu8LfgG9jtboH5PJLCAtei1PJHARjT"/>
-<div class="absolute inset-0 cinematic-gradient"></div>
-<div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
-<div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-primary-container text-[10px] font-bold tracking-widest text-white rounded-md uppercase">IMAX</span>
-<span class="px-3 py-1 bg-surface-bright/80 backdrop-blur-md text-[10px] font-bold tracking-widest text-white rounded-md uppercase">Gold Class</span>
-</div>
-</div>
-</div>
-<div class="p-6 space-y-3">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-2xl font-black tracking-tight text-on-surface">CGV Vincom Xuân Khánh</h3>
-<p class="font-body text-sm text-on-surface/60 mt-1 flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="location_on">location_on</span>
-                            209 20/4, Ninh Kieu, Can Tho
-                            </p>
-</div>
-</div>
-<div class="pt-4 flex items-center justify-between">
-<button class="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95">SELECT</button>
-</div>
-</div>
-</div>
+@empty
+<div class="col-span-2 text-center text-gray-500 py-20">No cinemas available.</div>
+@endforelse
 </div>
 </main>
 </body></html>

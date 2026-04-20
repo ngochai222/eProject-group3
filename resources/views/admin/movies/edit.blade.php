@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2 class="mb-4">✏️ Edit Movie</h2>
+<h2 class="mb-4">Edit Movie</h2>
 
 <form action="{{ route('admin.movies.update', $movie->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -30,7 +30,7 @@
 
     <div class="mb-3">
         <label>Duration</label>
-        <input type="number" name="duration" class="form-control" value="{{ $movie->duration }}">
+        <input type="number" name="duration" class="form-control" value="{{ $movie->duration }}" min="1">
     </div>
 
     <div class="mb-3">

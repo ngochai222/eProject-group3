@@ -19,8 +19,8 @@
                class="{{ request()->routeIs('cinema') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Cinemas
             </a>
-            <a href="#coming-soon"
-               class="{{ request()->routeIs('booking*') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
+            <a href="{{ route('coming-soon') }}"
+               class="{{ request()->routeIs('coming-soon') ? 'text-[#E50914]' : 'text-[#E9BCB6]/70 hover:text-white' }} text-xs uppercase tracking-widest font-bold transition">
                 Coming Soon
             </a>
             <a href="{{ route('showtime') }}"

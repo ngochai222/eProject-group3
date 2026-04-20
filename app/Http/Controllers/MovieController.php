@@ -60,6 +60,22 @@ class MovieController extends Controller
         return view('show-time-detail', compact('movie', 'cinemas'));
     }
 
+    public function comingSoon()
+    {
+        $oneMonthLater = now()->addMonth();
+
+        $movies = \App\Models\Movie::whereHas('showtimes', function($q) use ($oneMonthLater) {
+            $q->where('start_time', '>', $oneMonthLater);
+        })->with('showtimes')->get();
+
+        // Fallback hardcode nếu DB trống
+        if ($movies->isEmpty()) {
+            $movies = collect($this->getComingSoonMovies())->map(fn($m) => (object)$m);
+        }
+
+        return view('coming-soon', compact('movies'));
+    }
+
     public function showtime()
     {
         $showtimes = \App\Models\Showtime::with('movie')

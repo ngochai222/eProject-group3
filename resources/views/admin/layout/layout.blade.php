@@ -38,6 +38,9 @@
         <a href="/admin/cinemas" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/cinemas*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
             <i class="fa fa-building w-4"></i> Cinemas
         </a>
+        <a href="/admin/customers" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/customers*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-users w-4"></i> Customer Accounts
+        </a>
     </nav>
 
     <div class="p-4 border-t border-gray-800">

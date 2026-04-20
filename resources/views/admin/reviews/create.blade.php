@@ -2,68 +2,74 @@
 
 @section('content')
 
-<h2>⭐ Viết Review Phim</h2>
+<div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-white">Add Review</h2>
+    <a href="{{ route('admin.reviews.index') }}" class="text-gray-400 hover:text-white text-sm transition">← Back</a>
+</div>
 
+<div class="bg-[#11161c] p-6 rounded-xl max-w-xl">
 <form action="{{ route('admin.reviews.store') }}" method="POST" enctype="multipart/form-data">
 @csrf
 
-<label>Phim</label>
-<select name="movie_id" class="form-control mb-3">
-@foreach($movies as $m)
-<option value="{{ $m->id }}">{{ $m->title }}</option>
-@endforeach
-</select>
-
-<label>Tên bạn</label>
-<input type="text" name="user_name" class="form-control mb-3">
-
-<label>Đánh giá</label>
-
-<div id="starBox" class="mb-3">
-    <span class="star" data-value="1">★</span>
-    <span class="star" data-value="2">★</span>
-    <span class="star" data-value="3">★</span>
-    <span class="star" data-value="4">★</span>
-    <span class="star" data-value="5">★</span>
+<div class="mb-4">
+    <label class="text-sm text-gray-400">Movie</label>
+    <select name="movie_id" class="form-control mt-1">
+        @foreach($movies as $m)
+            <option value="{{ $m->id }}">{{ $m->title }}</option>
+        @endforeach
+    </select>
 </div>
 
-<input type="hidden" name="rating" id="ratingInput">
+<div class="mb-4">
+    <label class="text-sm text-gray-400">Your Name</label>
+    <input type="text" name="user_name" class="form-control mt-1">
+</div>
 
-<label>Nhận xét</label>
-<textarea name="comment" class="form-control mb-3"></textarea>
+<div class="mb-4">
+    <label class="text-sm text-gray-400 block mb-2">Rating</label>
+    <div id="starBox" class="flex gap-1">
+        @for($i=1;$i<=5;$i++)
+            <span class="star text-3xl text-gray-600 cursor-pointer" data-value="{{ $i }}">★</span>
+        @endfor
+    </div>
+    <input type="hidden" name="rating" id="ratingInput">
+</div>
 
-<label>Ảnh</label>
-<input type="file" name="image" class="form-control mb-3">
+<div class="mb-4">
+    <label class="text-sm text-gray-400">Comment</label>
+    <textarea name="comment" class="form-control mt-1" rows="4"></textarea>
+</div>
 
-<button class="btn btn-warning">Gửi Review</button>
+<div class="mb-4">
+    <label class="text-sm text-gray-400">Image</label>
+    <input type="file" name="image" class="form-control mt-1">
+</div>
 
+<button class="btn btn-warning">Submit Review</button>
 </form>
-
-<style>
-.star {
-    font-size: 30px;
-    color: gray;
-    cursor: pointer;
-}
-.star.active {
-    color: gold;
-}
-</style>
+</div>
 
 <script>
-let stars = document.querySelectorAll('.star');
-let ratingInput = document.getElementById('ratingInput');
-
+const stars = document.querySelectorAll('.star');
 stars.forEach(star => {
     star.addEventListener('click', function() {
-        let value = this.getAttribute('data-value');
-        ratingInput.value = value;
-
-        stars.forEach(s => s.classList.remove('active'));
-
-        for (let i = 0; i < value; i++) {
-            stars[i].classList.add('active');
-        }
+        const value = this.getAttribute('data-value');
+        document.getElementById('ratingInput').value = value;
+        stars.forEach((s, i) => {
+            s.style.color = i < value ? 'gold' : '#4b5563';
+        });
+    });
+    star.addEventListener('mouseover', function() {
+        const value = this.getAttribute('data-value');
+        stars.forEach((s, i) => {
+            s.style.color = i < value ? 'gold' : '#4b5563';
+        });
+    });
+    star.addEventListener('mouseout', function() {
+        const val = document.getElementById('ratingInput').value || 0;
+        stars.forEach((s, i) => {
+            s.style.color = i < val ? 'gold' : '#4b5563';
+        });
     });
 });
 </script>

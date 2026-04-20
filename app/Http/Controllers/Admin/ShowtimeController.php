@@ -13,7 +13,16 @@ class ShowtimeController extends Controller
     public function index()
     {
         $showtimes = Showtime::with('movie')->latest()->get();
-        return view('admin.showtimes.index', compact('showtimes'));
+
+        // Lấy danh sách ngày có lịch chiếu trong tháng hiện tại
+        $showtimeDates = Showtime::selectRaw('DATE(start_time) as date')
+            ->whereYear('start_time', now()->year)
+            ->whereMonth('start_time', now()->month)
+            ->pluck('date')
+            ->map(fn($d) => \Carbon\Carbon::parse($d)->day)
+            ->toArray();
+
+        return view('admin.showtimes.index', compact('showtimes', 'showtimeDates'));
     }
 
     // FORM CREATE
@@ -46,7 +55,7 @@ class ShowtimeController extends Controller
             ->exists();
 
         if ($exists) {
-            return back()->with('error', '⚠️ Suất chiếu đã tồn tại!');
+            return back()->with('error', 'Showtime already exists!');
         }
 
         Showtime::create([
@@ -56,7 +65,7 @@ class ShowtimeController extends Controller
         ]);
 
         return redirect()->route('admin.showtimes.index')
-            ->with('success', '🎉 Thêm lịch chiếu thành công!');
+            ->with('success', 'Showtime added successfully!');
     }
 
     // FORM EDIT
@@ -90,7 +99,7 @@ class ShowtimeController extends Controller
         ]);
 
         return redirect()->route('admin.showtimes.index')
-            ->with('success', '✅ Cập nhật thành công!');
+            ->with('success', 'Showtime updated successfully!');
     }
 
     // DELETE
@@ -98,6 +107,6 @@ class ShowtimeController extends Controller
     {
         Showtime::findOrFail($id)->delete();
 
-        return back()->with('success', '🗑 Xóa thành công!');
+        return back()->with('success', 'Showtime deleted.');
     }
 }

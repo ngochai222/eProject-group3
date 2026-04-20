@@ -15,13 +15,16 @@ use App\Http\Controllers\Admin\ShowtimeController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CinemaController as AdminCinemaController;
+use App\Http\Controllers\Admin\CustomerController as AdminCustomerController;
+use App\Http\Controllers\CinemaController;
 
 // Public
 Route::get('/', [MovieController::class, 'index'])->name('home');
-Route::get('/cinema', [MovieController::class, 'cinema'])->name('cinema');
+Route::get('/cinema', [CinemaController::class, 'index'])->name('cinema');
 Route::get('/movie/{index}', [MovieController::class, 'detail'])->name('movie.detail');
 Route::get('/showtime-detail/{id}', [MovieController::class, 'showtimeDetail'])->name('showtime.detail');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
+Route::get('/coming-soon', [MovieController::class, 'comingSoon'])->name('coming-soon');
 Route::get('/showtime', [MovieController::class, 'showtime'])->name('showtime');
 
 // Auth
@@ -51,8 +54,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('movies', AdminMovieController::class);
     Route::resource('showtimes', ShowtimeController::class);
     Route::resource('reviews', ReviewController::class);
+    Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/{id}', [AdminCustomerController::class, 'show'])->name('customers.show');
     Route::get('/cinemas', [AdminCinemaController::class, 'index'])->name('cinemas.index');
+    Route::get('/cinemas/create', [AdminCinemaController::class, 'create'])->name('cinemas.create');
     Route::post('/cinemas', [AdminCinemaController::class, 'store'])->name('cinemas.store');
+    Route::get('/cinemas/{id}/edit', [AdminCinemaController::class, 'edit'])->name('cinemas.edit');
     Route::put('/cinemas/{id}', [AdminCinemaController::class, 'update'])->name('cinemas.update');
     Route::delete('/cinemas/{id}', [AdminCinemaController::class, 'destroy'])->name('cinemas.destroy');
 });

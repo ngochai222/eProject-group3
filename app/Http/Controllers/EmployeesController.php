@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Employee;
 use App\Models\User;
 use App\Models\Room;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeesController extends Controller
 {
@@ -32,10 +33,14 @@ class EmployeesController extends Controller
             'phone' => 'nullable|string|max:20',
             'position' => 'required|in:staff,manager,admin',
             'salary' => 'nullable|numeric',
-            'room_id' => 'nullable|exists:rooms,id'
+            'room_id' => 'nullable|exists:rooms,id',
+            'password' => 'required|string|min:8'
         ]);
 
-        Employee::create($request->all());
+        $data = $request->all();
+        $data['password'] = Hash::make($request->password);
+
+        Employee::create($data);
 
         return redirect()->route('employees.index')->with('success');
     }
@@ -65,10 +70,18 @@ class EmployeesController extends Controller
             'phone' => 'nullable|string|max:20',
             'position' => 'required|in:staff,manager,admin',
             'salary' => 'nullable|numeric',
-            'room_id' => 'nullable|exists:rooms,id'
+            'room_id' => 'nullable|exists:rooms,id',
+            'password' => 'nullable|string|min:8'
         ]);
 
-        $employee->update($request->all());
+        $data = $request->all();
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        } else {
+            unset($data['password']);
+        }
+
+        $employee->update($data);
 
         return redirect()->route('employees.index')->with('success');
     }

@@ -16,6 +16,8 @@ class Seat extends Model
     protected $fillable = [
         'room_id',
         'seat_number',
+        'row',
+        'column',
         'seat_type',
     ];
     public function room()

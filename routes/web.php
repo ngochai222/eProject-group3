@@ -50,4 +50,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('movies', AdminMovieController::class);
     Route::resource('showtimes', ShowtimeController::class);
     Route::resource('reviews', ReviewController::class);
+    Route::resource('bookings', BookingController::class);
+    Route::resource('seats', SeatController::class);
+    Route::resource('tickets', TicketController::class);
+    Route::resource('employees', EmployeesController::class);
 });

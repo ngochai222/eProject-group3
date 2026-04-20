@@ -11,6 +11,9 @@ return new class extends Migration
         if (!Schema::hasTable('admin')) {
             Schema::create('admin', function (Blueprint $table) {
                 $table->id();
+                $table->string('admin_email');
+                $table->string('admin_password');
+                $table->text('admin_role');
                 $table->timestamps();
             });
         }

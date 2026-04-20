@@ -4,6 +4,12 @@
 
 <h2 class="mb-4">➕ Add Movie</h2>
 
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+    </div>
+@endif
+
 <form action="{{ route('admin.movies.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 

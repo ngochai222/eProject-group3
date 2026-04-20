@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\AdminController;
 Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('/cinema', [MovieController::class, 'cinema'])->name('cinema');
 Route::get('/movie/{index}', [MovieController::class, 'detail'])->name('movie.detail');
+Route::get('/showtime-detail/{id}', [MovieController::class, 'showtimeDetail'])->name('showtime.detail');
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
 Route::get('/showtime', [MovieController::class, 'showtime'])->name('showtime');
 

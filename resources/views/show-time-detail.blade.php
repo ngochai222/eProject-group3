@@ -2,93 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cinebook</title>
+    <title>{{ $movie->title }} - Showtimes</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-black text-white font-sans">
 
 @include('components.header')
 
-<div class="pt-16">
-<div class="grid grid-cols-4 gap-10 px-10 py-10">
-    <img src="{{ $movie['image'] }}" class="w-full rounded">
+<div class="pt-20 pb-16 px-6 md:px-10 max-w-5xl mx-auto">
 
-    <div class="col-span-3">
-        <h2 class="text-2xl font-bold mb-2">{{ $movie['title'] }}</h2>
-        <div class="flex gap-4 text-sm text-gray-400 mb-6">
-            <span>🎬 {{ $movie['genre'] }}</span>
-            @if(isset($movie['duration']))<span>⏱ {{ $movie['duration'] }}</span>@endif
-        </div>
-
-        <!-- Date -->
-        <h3 class="mb-2">Select a date</h3>
-        <div class="flex gap-3 mb-6">
-            @foreach(range(12,17) as $day)
-                <div class="bg-yellow-400 text-black px-4 py-3 rounded text-center">
-                    <p class="font-bold">{{ $day }}</p>
-                    <p>April</p>
-                </div>
-            @endforeach
-        </div>
-
-        <!-- Cinema -->
-        <h3 class="mb-2">Select a cinema</h3>
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="border border-yellow-400 p-4 rounded">
-                <h4 class="font-bold">Grand IMAX Plaza</h4>
-                <p class="text-sm text-gray-400">Downtown</p>
-                <div class="flex gap-2 mt-2">
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">IMAX</span>
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">2D</span>
-                </div>
-            </div>
-
-            <div class="border border-yellow-400 p-4 rounded">
-                <h4 class="font-bold">Downtown Boutique</h4>
-                <p class="text-sm text-gray-400">City Center</p>
-                <div class="flex gap-2 mt-2">
-                    <span class="bg-red-500 px-2 py-1 text-xs rounded">2D</span>
-                </div>
+    {{-- Movie Info --}}
+    <div class="flex gap-6 mb-10">
+        <img src="{{ $movie->poster ? asset('uploads/'.$movie->poster) : 'https://via.placeholder.com/150x220?text=No+Image' }}"
+             class="w-32 rounded-xl object-cover flex-shrink-0" alt="{{ $movie->title }}">
+        <div>
+            <h2 class="text-2xl font-black uppercase mb-2">{{ $movie->title }}</h2>
+            <div class="flex gap-4 text-sm text-gray-400">
+                @if($movie->genre)<span>🎬 {{ $movie->genre }}</span>@endif
+                @if($movie->duration)<span>⏱ {{ $movie->duration }} min</span>@endif
             </div>
         </div>
-
-        <!-- Showtime -->
-        <h3 class="mb-2">IMAX 2D</h3>
-        <div class="flex gap-4 mb-6">
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>11:30 AM</p>
-                <p class="text-yellow-400">$22.50</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded opacity-50">
-                <p>06:00 PM</p>
-                <p class="text-red-500">Sold Out</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>07:45 PM</p>
-                <p class="text-yellow-400">$22.50</p>
-            </div>
-        </div>
-
-        <!-- VIP -->
-        <h3 class="mb-2">VIP Lounge</h3>
-        <div class="flex gap-4 mb-6">
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>05:30 PM</p>
-                <p class="text-yellow-400">$35.00</p>
-            </div>
-
-            <div class="bg-gray-800 px-6 py-4 rounded">
-                <p>08:00 PM</p>
-                <p class="text-yellow-400">$35.00</p>
-            </div>
-        </div>
-
-        <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold">
-            CHOOSE SEATS
-        </button>
     </div>
+
+    {{-- Showtimes --}}
+    <h3 class="text-lg font-bold uppercase tracking-widest mb-4 text-[#E50914]">Available Showtimes</h3>
+
+    @if($movie->showtimes->isEmpty())
+        <div class="bg-white/5 rounded-2xl p-8 text-center text-gray-500">
+            No showtimes available for this movie.
+        </div>
+    @else
+        @php
+            $grouped = $movie->showtimes->groupBy(fn($s) => \Carbon\Carbon::parse($s->start_time)->format('Y-m-d'));
+        @endphp
+
+        @foreach($grouped as $date => $times)
+        <div class="mb-6">
+            <p class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-3">
+                {{ \Carbon\Carbon::parse($date)->format('l, F j, Y') }}
+            </p>
+            <div class="flex flex-wrap gap-3">
+                @foreach($times as $showtime)
+                <div class="bg-gray-800 hover:bg-[#E50914] cursor-pointer px-5 py-3 rounded-xl text-center transition">
+                    <p class="font-bold">{{ \Carbon\Carbon::parse($showtime->start_time)->format('H:i') }}</p>
+                    @if($showtime->end_time)
+                        <p class="text-xs text-gray-400">– {{ \Carbon\Carbon::parse($showtime->end_time)->format('H:i') }}</p>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endforeach
+    @endif
+
 </div>
 
 </body>

@@ -8,21 +8,36 @@ class MovieController extends Controller
 {
     public function index()
     {
-        // Lấy từ DB, ưu tiên DB — fallback về hardcode nếu DB trống
-        $dbMovies = \App\Models\Movie::latest()->get();
+        $now = \Carbon\Carbon::now();
+        $oneMonthLater = $now->copy()->addMonth();
 
-        if ($dbMovies->count() > 0) {
-            $hotMovies = $dbMovies->map(fn($m) => [
-                'id'           => $m->id,
-                'title'        => $m->title,
-                'genre'        => $m->genre ?? '',
-                'duration'     => $m->release_date ?? '',
-                'release_date' => $m->release_date ?? '',
-                'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
-            ])->toArray();
-            $comingSoonMovies = [];
-        } else {
+        // Movies có showtime trong vòng 1 tháng = đang chiếu
+        $hotMovies = \App\Models\Movie::whereHas('showtimes', function($q) use ($now, $oneMonthLater) {
+            $q->whereBetween('start_time', [$now, $oneMonthLater]);
+        })->with('showtimes')->get()->map(fn($m) => [
+            'id'       => $m->id,
+            'title'    => $m->title,
+            'genre'    => $m->genre ?? '',
+            'duration' => $m->duration ? $m->duration . ' min' : '',
+            'image'    => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+        ])->toArray();
+
+        // Movies có showtime sau 1 tháng = coming soon
+        $comingSoonMovies = \App\Models\Movie::whereHas('showtimes', function($q) use ($oneMonthLater) {
+            $q->where('start_time', '>', $oneMonthLater);
+        })->with('showtimes')->get()->map(fn($m) => [
+            'id'           => $m->id,
+            'title'        => $m->title,
+            'genre'        => $m->genre ?? '',
+            'release_date' => $m->release_date ? \Carbon\Carbon::parse($m->release_date)->format('M Y') : '',
+            'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+        ])->toArray();
+
+        // Fallback nếu DB trống
+        if (empty($hotMovies)) {
             $hotMovies = $this->getHotMovies();
+        }
+        if (empty($comingSoonMovies)) {
             $comingSoonMovies = $this->getComingSoonMovies();
         }
 
@@ -32,6 +47,15 @@ class MovieController extends Controller
     public function cinema()
     {
         return view('cinema');
+    }
+
+    public function showtimeDetail($id)
+    {
+        $movie = \App\Models\Movie::with(['showtimes' => function($q) {
+            $q->where('start_time', '>=', now())->orderBy('start_time');
+        }])->findOrFail($id);
+
+        return view('show-time-detail', compact('movie'));
     }
 
     public function showtime()
@@ -54,8 +78,8 @@ class MovieController extends Controller
                 'id'           => $dbMovie->id,
                 'title'        => $dbMovie->title,
                 'genre'        => $dbMovie->genre ?? '',
-                'duration'     => $dbMovie->release_date ?? '',
-                'release_date' => $dbMovie->release_date ?? '',
+                'duration'     => $dbMovie->duration ? $dbMovie->duration . ' min' : '',
+                'release_date' => $dbMovie->release_date ? \Carbon\Carbon::parse($dbMovie->release_date)->format('M d, Y') : '',
                 'cast'         => $dbMovie->cast ?? '',
                 'description'  => $dbMovie->description ?? '',
                 'trailer'      => $dbMovie->trailer ?? '',
@@ -67,7 +91,7 @@ class MovieController extends Controller
             $movie = $allMovies[$index] ?? abort(404);
         }
 
-        return view('show-time-detail', compact('movie'));
+        return view('movie-detail', compact('movie'));
     }
 
     private function getHotMovies()

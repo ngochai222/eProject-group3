@@ -28,6 +28,28 @@
             </select>
         </div>
 
+        {{-- Cinema + Room --}}
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="text-sm text-gray-400">Cinema</label>
+                <select name="cinema_id" id="selCinema"
+                    class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none"
+                    onchange="loadRooms(this.value)">
+                    <option value="">-- Choose cinema --</option>
+                    @foreach($cinemas as $cinema)
+                        <option value="{{ $cinema->cinema_id }}">{{ $cinema->cinema_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="text-sm text-gray-400">Room</label>
+                <select name="room_id" id="selRoom"
+                    class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none">
+                    <option value="">-- Select cinema first --</option>
+                </select>
+            </div>
+        </div>
+
         {{-- Date --}}
         <div>
             <label class="text-sm text-gray-400">Date</label>
@@ -195,6 +217,18 @@ document.getElementById('showtimeForm').onsubmit = function(e) {
 };
 
 renderCalendar();
+
+async function loadRooms(cinemaId) {
+    const sel = document.getElementById('selRoom');
+    sel.innerHTML = '<option>Loading...</option>';
+    if (!cinemaId) { sel.innerHTML = '<option value="">-- Select cinema first --</option>'; return; }
+    const res = await fetch(`/admin/rooms?cinema_id=${cinemaId}`);
+    const rooms = await res.json();
+    sel.innerHTML = '<option value="">-- Choose room --</option>';
+    rooms.forEach(r => {
+        sel.innerHTML += `<option value="${r.id}">${r.name}</option>`;
+    });
+}
 </script>
 
 @endsection

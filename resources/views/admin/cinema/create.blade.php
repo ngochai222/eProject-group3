@@ -31,13 +31,14 @@
 
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label class="text-sm text-gray-400">Number of Screens</label>
-                <input type="number" name="screens" placeholder="5" min="1"
+                <label class="text-sm text-gray-400">Number of Rooms</label>
+                <input type="number" name="num_rooms" placeholder="e.g. 5" min="1" max="20"
                     class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none"
                     oninput="updatePreview()">
+                <p class="text-xs text-gray-600 mt-1">Rooms will be auto-created (Room 1, Room 2...)</p>
             </div>
             <div>
-                <label class="text-sm text-gray-400">Seat Capacity</label>
+                <label class="text-sm text-gray-400">Seat Capacity per Room</label>
                 <input type="number" name="capacity" placeholder="120" min="1"
                     class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none"
                     oninput="updatePreview()">

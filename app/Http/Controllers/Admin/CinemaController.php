@@ -48,6 +48,21 @@ class CinemaController extends Controller
             'updated_at'     => now(),
         ]);
 
+        // Auto-create rooms
+        $cinemaId = DB::getPdo()->lastInsertId();
+        $numRooms = (int) $request->num_rooms;
+        $capacity = (int) $request->capacity ?: 100;
+        for ($i = 1; $i <= $numRooms; $i++) {
+            DB::table('rooms')->insert([
+                'cinema_id'    => $cinemaId,
+                'rooms_number' => 'R' . $i,
+                'name'         => 'Room ' . $i,
+                'capacity'     => $capacity,
+                'created_at'   => now(),
+                'updated_at'   => now(),
+            ]);
+        }
+
         return back()->with('success', 'Cinema added successfully.');
     }
 

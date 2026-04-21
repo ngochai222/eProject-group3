@@ -28,8 +28,9 @@ class ShowtimeController extends Controller
     // FORM CREATE
     public function create()
     {
-        $movies = Movie::all();
-        return view('admin.showtimes.create', compact('movies'));
+        $movies  = Movie::all();
+        $cinemas = \DB::table('cinema')->get();
+        return view('admin.showtimes.create', compact('movies', 'cinemas'));
     }
 
     // STORE (FIX CHÍNH Ở ĐÂY)

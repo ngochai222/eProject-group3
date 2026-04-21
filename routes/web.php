@@ -26,6 +26,11 @@ Route::get('/showtime-detail/{id}', [MovieController::class, 'showtimeDetail'])-
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
 Route::get('/coming-soon', [MovieController::class, 'comingSoon'])->name('coming-soon');
 Route::get('/showtime', [MovieController::class, 'showtime'])->name('showtime');
+Route::get('/admin/rooms', function() {
+    $cinemaId = request('cinema_id');
+    $rooms = \DB::table('rooms')->where('cinema_id', $cinemaId)->get(['id', 'name']);
+    return response()->json($rooms);
+});
 
 // Auth
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
@@ -49,17 +54,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'showLogin'])->name('login');
     Route::post('/login', [AdminController::class, 'login'])->name('login.post');
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    Route::resource('movies', AdminMovieController::class);
-    Route::resource('showtimes', ShowtimeController::class);
-    Route::resource('reviews', ReviewController::class);
-    Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/{id}', [AdminCustomerController::class, 'show'])->name('customers.show');
-    Route::get('/cinemas', [AdminCinemaController::class, 'index'])->name('cinemas.index');
-    Route::get('/cinemas/create', [AdminCinemaController::class, 'create'])->name('cinemas.create');
-    Route::post('/cinemas', [AdminCinemaController::class, 'store'])->name('cinemas.store');
-    Route::get('/cinemas/{id}/edit', [AdminCinemaController::class, 'edit'])->name('cinemas.edit');
-    Route::put('/cinemas/{id}', [AdminCinemaController::class, 'update'])->name('cinemas.update');
-    Route::delete('/cinemas/{id}', [AdminCinemaController::class, 'destroy'])->name('cinemas.destroy');
+    Route::middleware('admin.auth')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+        Route::resource('movies', AdminMovieController::class);
+        Route::resource('showtimes', ShowtimeController::class);
+        Route::resource('reviews', ReviewController::class);
+        Route::get('/customers', [AdminCustomerController::class, 'index'])->name('customers.index');
+        Route::get('/customers/{id}', [AdminCustomerController::class, 'show'])->name('customers.show');
+        Route::get('/cinemas', [AdminCinemaController::class, 'index'])->name('cinemas.index');
+        Route::get('/cinemas/create', [AdminCinemaController::class, 'create'])->name('cinemas.create');
+        Route::post('/cinemas', [AdminCinemaController::class, 'store'])->name('cinemas.store');
+        Route::get('/cinemas/{id}/edit', [AdminCinemaController::class, 'edit'])->name('cinemas.edit');
+        Route::put('/cinemas/{id}', [AdminCinemaController::class, 'update'])->name('cinemas.update');
+        Route::delete('/cinemas/{id}', [AdminCinemaController::class, 'destroy'])->name('cinemas.destroy');
+    });
 });

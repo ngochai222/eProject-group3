@@ -41,12 +41,6 @@
 
     <main class="flex-1 pt-16 md:pt-18">
 
-    @if (session('success'))
-        <div class="mx-4 mt-20 rounded-2xl border border-green-500/40 bg-green-500/10 px-4 py-3 text-sm text-green-100 shadow-lg shadow-green-500/10 md:mx-6">
-            {{ session('success') }}
-        </div>
-    @endif
-
     
 
     <!-- Section -->
@@ -92,7 +86,7 @@
             <div>
                 <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Hot Movies</h3>
             </div>
-            <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
+            <a href="{{ route('movies.all', ['filter' => 'Now Showing']) }}" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
                 <span class="hidden sm:inline">View All</span>
                 <span class="material-icons text-sm">arrow_forward</span>
             </a>
@@ -126,16 +120,16 @@
             <div>
                 <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Coming Soon</h3>
             </div>
-            <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
+            <a href="{{ route('movies.all', ['filter' => 'Coming Soon']) }}" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
                 <span class="hidden sm:inline">View All</span>
                 <span class="material-icons text-sm">arrow_forward</span>
             </a>
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 px-4 md:px-6">
-            @foreach($comingSoonMovies as $index => $movie)
+            @forelse($comingSoonMovies as $index => $movie)
             <div class="group cursor-pointer">
-                <a href="{{ route('movie.detail', $index + 4) }}">
+                <a href="{{ route('movie.detail', $movie['id'] ?? $index) }}">
                 <div class="relative aspect-[3/4] rounded-lg md:rounded-2xl overflow-hidden mb-2 md:mb-4 bg-gray-800">
                     <img
                         src="{{ $movie['image'] }}"
@@ -143,9 +137,11 @@
                         alt="{{ $movie['title'] }}"
                         loading="lazy"
                     >
-                    <div class="absolute top-2 left-2 bg-[#E50914] text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-full">
-                        {{ $movie['release_date'] }}
+                    @if(!empty($movie['release_date']))
+                    <div class="absolute top-2 left-2 bg-[#E50914] text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-full shadow-lg">
+                        Khởi chiếu: {{ $movie['release_date'] }}
                     </div>
+                    @endif
                 </div>
                 </a>
                 <h4 class="font-bold text-xs md:text-lg leading-tight uppercase mb-1 line-clamp-2">{{ $movie['title'] }}</h4>
@@ -153,7 +149,11 @@
                     {{ $movie['genre'] }}
                 </p>
             </div>
-            @endforeach
+            @empty
+            <div class="col-span-4 text-center text-gray-500 py-20">
+                Hiện chưa có phim sắp chiếu nào.
+            </div>
+            @endforelse
         </div>
     </section>
     <section class="mt-10 md:mt-12 px-4 md:px-6">
@@ -161,7 +161,7 @@
             <div>
                 <h3 class="text-xl md:text-3xl font-black italic uppercase tracking-tight">Currently Showing</h3>
             </div>
-            <a href="#" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
+            <a href="{{ route('movies.all', ['filter' => 'Now Showing']) }}" class="text-[#E9BCB6] text-[8px] md:text-[10px] font-bold uppercase tracking-widest flex items-center gap-1 hover:text-[#E50914] transition">
                 <span class="hidden sm:inline">View All</span>
                 <span class="material-icons text-sm">arrow_forward</span>
             </a>

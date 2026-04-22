@@ -120,20 +120,23 @@
                         </div>
                     @endif
                 </div>
-                <span class="text-xs bg-yellow-400/20 text-yellow-400 px-2 py-1 rounded font-bold">MEMBER SINCE {{ $selected->created_at ? $selected->created_at->year : '2024' }}</span>
             </div>
 
             <h3 class="font-black text-white text-lg">{{ $selected->customer_name }}</h3>
             <p class="text-xs text-gray-500 mb-4">Customer ID: CK-{{ str_pad($selected->customer_id, 5, '0', STR_PAD_LEFT) }}</p>
 
             <div class="grid grid-cols-2 gap-3 mb-4">
+                @php
+                    $totalBookings = \DB::table('bookings')->where('customer_name', $selected->customer_name)->count();
+                    $lifetimeSales = \DB::table('bookings')->where('customer_name', $selected->customer_name)->sum('total_price');
+                @endphp
                 <div class="bg-black rounded-xl p-3">
                     <p class="text-xs text-gray-500 mb-1">Lifetime Sales</p>
-                    <p class="font-black text-yellow-400">$0</p>
+                    <p class="font-black text-yellow-400">${{ number_format($lifetimeSales, 2) }}</p>
                 </div>
                 <div class="bg-black rounded-xl p-3">
                     <p class="text-xs text-gray-500 mb-1">Total Bookings</p>
-                    <p class="font-black text-cyan-400">0</p>
+                    <p class="font-black text-cyan-400">{{ $totalBookings }}</p>
                 </div>
             </div>
 
@@ -154,9 +157,29 @@
                 <p class="text-xs text-gray-500 uppercase tracking-widest">Recent Bookings</p>
                 <a href="#" class="text-xs text-cyan-400 hover:underline">View All</a>
             </div>
-            <div class="space-y-3 text-sm text-gray-500 text-center py-4">
-                No bookings yet.
+            @php
+                $recentBookings = \DB::table('bookings')
+                    ->join('showtimes', 'bookings.showtime_id', '=', 'showtimes.id')
+                    ->join('movies', 'showtimes.movie_id', '=', 'movies.id')
+                    ->where('bookings.customer_name', $selected->customer_name)
+                    ->select('movies.title', 'movies.poster', 'showtimes.start_time', 'bookings.total_price', 'bookings.status')
+                    ->orderByDesc('bookings.created_at')
+                    ->limit(3)
+                    ->get();
+            @endphp
+            @forelse($recentBookings as $b)
+            <div class="flex items-center gap-3 mb-3">
+                <img src="{{ $b->poster ? asset('uploads/'.$b->poster) : 'https://via.placeholder.com/40x56?text=?' }}"
+                     class="w-10 h-14 rounded object-cover flex-shrink-0">
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-white truncate">{{ $b->title }}</p>
+                    <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($b->start_time)->format('d M Y · H:i') }}</p>
+                    <p class="text-xs text-green-400 font-bold">${{ number_format($b->total_price, 2) }}</p>
+                </div>
             </div>
+            @empty
+            <div class="text-sm text-gray-500 text-center py-4">No bookings yet.</div>
+            @endforelse
         </div>
 
     </div>

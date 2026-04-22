@@ -15,6 +15,8 @@ class Movie extends Model
         'title',
         'description',
         'duration',
+        'base_price',
+        'release_date',
         'poster',
         'trailer',
         'genre',

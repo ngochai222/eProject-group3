@@ -11,34 +11,32 @@ class MovieController extends Controller
         $now = \Carbon\Carbon::now();
         $oneMonthLater = $now->copy()->addMonth();
 
-        // Movies có showtime trong vòng 1 tháng = đang chiếu
-        $hotMovies = \App\Models\Movie::whereHas('showtimes', function($q) use ($now, $oneMonthLater) {
-            $q->whereBetween('start_time', [$now, $oneMonthLater]);
-        })->with('showtimes')->get()->map(fn($m) => [
-            'id'       => $m->id,
-            'title'    => $m->title,
-            'genre'    => $m->genre ?? '',
-            'duration' => $m->duration ? $m->duration . ' min' : '',
-            'image'    => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
-        ])->toArray();
+        $allMovies = \App\Models\Movie::all();
+        $hotMovies = [];
+        $comingSoonMovies = [];
 
-        // Movies có showtime sau 1 tháng = coming soon
-        $comingSoonMovies = \App\Models\Movie::whereHas('showtimes', function($q) use ($oneMonthLater) {
-            $q->where('start_time', '>', $oneMonthLater);
-        })->with('showtimes')->get()->map(fn($m) => [
-            'id'           => $m->id,
-            'title'        => $m->title,
-            'genre'        => $m->genre ?? '',
-            'release_date' => $m->release_date ? \Carbon\Carbon::parse($m->release_date)->format('M Y') : '',
-            'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
-        ])->toArray();
-
-        // Fallback nếu DB trống
-        if (empty($hotMovies)) {
-            $hotMovies = $this->getHotMovies();
-        }
-        if (empty($comingSoonMovies)) {
-            $comingSoonMovies = $this->getComingSoonMovies();
+        foreach ($allMovies as $m) {
+            $release = $m->release_date ? \Carbon\Carbon::parse($m->release_date) : null;
+            if ($release && $release->isFuture()) {
+                // Chưa tới ngày phát hành
+                $comingSoonMovies[] = [
+                    'id'           => $m->id,
+                    'title'        => $m->title,
+                    'genre'        => $m->genre ?? '',
+                    'release_date' => $m->release_date ? $release->format('M Y') : '',
+                    'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+                ];
+            } elseif ($release && $release->lte($now) && $release->gte($now->copy()->subMonth())) {
+                // Trong 1 tháng kể từ ngày phát hành
+                $hotMovies[] = [
+                    'id'       => $m->id,
+                    'title'    => $m->title,
+                    'genre'    => $m->genre ?? '',
+                    'duration' => $m->duration ? $m->duration . ' min' : '',
+                    'image'    => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+                ];
+            }
+            // Nếu muốn lấy danh sách Ended thì có thể bổ sung thêm ở đây
         }
 
         return view('homepage', compact('hotMovies', 'comingSoonMovies'));
@@ -60,6 +58,37 @@ class MovieController extends Controller
         return view('show-time-detail', compact('movie', 'cinemas'));
     }
 
+    public function allMovies(\Illuminate\Http\Request $request)
+    {
+        $now = \Carbon\Carbon::now();
+        $oneMonthLater = $now->copy()->addMonth();
+
+        $allMovies = \App\Models\Movie::all()->map(function($m) use ($now) {
+            $release = $m->release_date ? \Carbon\Carbon::parse($m->release_date) : null;
+            if ($release && $release->isFuture()) {
+                $status = 'Coming Soon';
+            } elseif ($release && $release->lte($now) && $release->gte($now->copy()->subMonth())) {
+                $status = 'Now Showing';
+            } else {
+                $status = 'Ended';
+            }
+            return [
+                'id'           => $m->id,
+                'title'        => $m->title,
+                'genre'        => $m->genre ?? '',
+                'duration'     => $m->duration ? $m->duration . ' min' : '',
+                'release_date' => $m->release_date ? \Carbon\Carbon::parse($m->release_date)->format('M d, Y') : '',
+                'base_price'   => $m->base_price ?? 10,
+                'image'        => $m->poster ? asset('uploads/' . $m->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
+                'status'       => $status,
+            ];
+        });
+
+        $filter = $request->query('filter', 'all');
+
+        return view('all-movies', compact('allMovies', 'filter'));
+    }
+
     public function comingSoon()
     {
         $oneMonthLater = now()->addMonth();
@@ -68,9 +97,8 @@ class MovieController extends Controller
             $q->where('start_time', '>', $oneMonthLater);
         })->with('showtimes')->get();
 
-        // Fallback hardcode nếu DB trống
         if ($movies->isEmpty()) {
-            $movies = collect($this->getComingSoonMovies())->map(fn($m) => (object)$m);
+            $movies = collect([]);
         }
 
         return view('coming-soon', compact('movies'));
@@ -104,31 +132,9 @@ class MovieController extends Controller
                 'image'        => $dbMovie->poster ? asset('uploads/' . $dbMovie->poster) : 'https://via.placeholder.com/300x450?text=No+Image',
             ];
         } else {
-            // Fallback hardcode
-            $allMovies = array_merge($this->getHotMovies(), $this->getComingSoonMovies());
-            $movie = $allMovies[$index] ?? abort(404);
+            abort(404);
         }
 
         return view('movie-detail', compact('movie'));
-    }
-
-    private function getHotMovies()
-    {
-        return [
-            ['title' => 'Ready OR Not 2: HERE I COME', 'genre' => 'HORROR, THRILLER', 'duration' => 'Apr 10, 2026', 'image' => 'https://tse4.mm.bing.net/th/id/OIP.JvaNzXdS810BFrL6WBiDCQHaLG?w=800&h=1199&rs=1&pid=ImgDetMain&o=7&rm=3'],
-            ['title' => 'MINIONS & MONSTERS', 'genre' => 'ANIMATION', 'duration' => 'July 1, 2026', 'image' => 'https://tse2.mm.bing.net/th/id/OIP.p6bu_8NTkP3XVJANMdmy7QHaLH?rs=1&pid=ImgDetMain&o=7&rm=3'],
-            ['title' => 'Spider-Man: Brand New Day', 'genre' => 'Adventure, Action', 'duration' => 'July 31, 2026', 'image' => 'https://image.tmdb.org/t/p/w500/9JCQtDCSpPR2ld55yNlEg1VwcQo.jpg'],
-            ['title' => 'Moana', 'genre' => 'Adventure, Fantasy', 'duration' => 'July 10, 2026', 'image' => 'https://image.tmdb.org/t/p/w500/oA2LhsQwm7QEQP7LM70TBtuhzT6.jpg'],
-        ];
-    }
-
-    private function getComingSoonMovies()
-    {
-        return [
-            ['title' => 'Avatar 3: Fire and Ash', 'genre' => 'Sci-Fi, Action', 'release_date' => 'Dec 2026', 'image' => 'https://image.tmdb.org/t/p/w500/tElnmtQ6yz1PjN1kePNl8yMSb59.jpg'],
-            ['title' => 'Mission: Impossible 8', 'genre' => 'Action, Thriller', 'release_date' => 'May 2026', 'image' => 'https://image.tmdb.org/t/p/w500/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg'],
-            ['title' => 'Jurassic World: Rebirth', 'genre' => 'Adventure, Sci-Fi', 'release_date' => 'Jul 2026', 'image' => 'https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg'],
-            ['title' => 'The Batman 2', 'genre' => 'Action, Crime', 'release_date' => 'Oct 2026', 'image' => 'https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg'],
-        ];
     }
 }

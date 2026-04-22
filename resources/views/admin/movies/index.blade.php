@@ -30,15 +30,18 @@
         <h2 class="text-3xl font-black text-cyan-400">
             {{ str_pad($movies->filter(function($m) {
                 $release = $m->release_date ? \Carbon\Carbon::parse($m->release_date) : null;
-                return $release && $release->between(now(), now()->addMonth());
+                return $release && $release->lte(now()) && $release->gte(now()->copy()->subMonth());
             })->count(), 2, '0', STR_PAD_LEFT) }}
         </h2>
     </div>
     <div class="bg-[#11161c] rounded-xl p-5">
-        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Coming soon
-            
-        </p>
-        <h2 class="text-3xl font-black text-white">142</h2>
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Coming soon</p>
+        <h2 class="text-3xl font-black text-white">
+            {{ str_pad($movies->filter(function($m) {
+                $release = $m->release_date ? \Carbon\Carbon::parse($m->release_date) : null;
+                return $release && $release->isFuture();
+            })->count(), 2, '0', STR_PAD_LEFT) }}
+        </h2>
     </div>
 </div>
 
@@ -89,23 +92,25 @@
                 <th class="px-4 py-3 text-center">Release Date</th>
                 <th class="px-4 py-3 text-center">Status</th>
                 <th class="px-4 py-3 text-center">Rating</th>
+                <th class="px-4 py-3 text-center">Price</th>
+                <th class="px-4 py-3 text-center">Trailer</th>
                 <th class="px-4 py-3 text-center">Actions</th>
             </tr>
         </thead>
         <tbody id="movieTableBody">
             @forelse($movies as $movie)
             @php
-                $now = now();
+                $now = \Carbon\Carbon::now();
                 $oneMonthLater = $now->copy()->addMonth();
                 $release = $movie->release_date ? \Carbon\Carbon::parse($movie->release_date) : null;
 
-                if ($release && $release->between($now, $oneMonthLater)) {
-                    $status = 'Currently Showing';
-                } elseif ($release && $release->isFuture()) {
-                    $status = 'Coming Soon';
-                } else {
-                    $status = 'Ended';
-                }
+                    if ($release && $release->isFuture()) {
+                        $status = 'Coming Soon';
+                    } elseif ($release && $release->lte($now) && $release->gte($now->copy()->subMonth())) {
+                        $status = 'Currently Showing';
+                    } else {
+                        $status = 'Ended';
+                    }
                 $year = $release ? $release->year : '';
             @endphp
             <tr class="movie-row border-b border-gray-800/50 hover:bg-white/5 transition"
@@ -170,6 +175,21 @@
                     ★ {{ number_format($movie->reviews_avg_rating ?? 0, 1) }}
                 </td>
 
+                <td class="px-4 py-3 text-center text-green-400 font-bold text-sm">
+                    ${{ number_format($movie->base_price ?? 10, 2) }}
+                </td>
+
+                <td class="px-4 py-3 text-center">
+                    @if($movie->trailer)
+                        <button onclick="playTrailer('{{ $movie->trailer }}')"
+                            class="text-gray-400 hover:text-red-400 transition" title="Watch Trailer">
+                            <i class="fa fa-play-circle text-lg"></i>
+                        </button>
+                    @else
+                        <span class="text-gray-700">—</span>
+                    @endif
+                </td>
+
                 <td class="px-4 py-3 text-center">
                     <div class="flex items-center justify-center gap-3">
                         <a href="{{ route('admin.movies.edit', $movie->id) }}"
@@ -198,7 +218,44 @@
     </div>
 </div>
 
+{{-- Trailer Modal --}}
+<div id="trailerModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50"
+     onclick="closeTrailer()">
+    <div class="relative w-full max-w-3xl mx-4" onclick="event.stopPropagation()">
+        <button onclick="closeTrailer()"
+            class="absolute -top-10 right-0 text-gray-400 hover:text-white text-sm flex items-center gap-1">
+            <i class="fa fa-times"></i> Close
+        </button>
+        <div class="aspect-video rounded-xl overflow-hidden bg-black">
+            <iframe id="trailerFrame" src="" class="w-full h-full" allowfullscreen
+                allow="autoplay; encrypted-media"></iframe>
+        </div>
+    </div>
+</div>
+
 <script>
+function playTrailer(url) {
+    // Convert YouTube watch URL to embed
+    let embedUrl = url;
+    if (url.includes('youtube.com/watch?v=')) {
+        const id = url.split('v=')[1].split('&')[0];
+        embedUrl = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+    } else if (url.includes('youtu.be/')) {
+        const id = url.split('youtu.be/')[1].split('?')[0];
+        embedUrl = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+    }
+    document.getElementById('trailerFrame').src = embedUrl;
+    document.getElementById('trailerModal').classList.remove('hidden');
+}
+
+function closeTrailer() {
+    document.getElementById('trailerFrame').src = '';
+    document.getElementById('trailerModal').classList.add('hidden');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeTrailer(); });
+
+// Search filter
 document.getElementById('searchInput').addEventListener('input', filterTable);
 document.getElementById('genreFilter').addEventListener('change', filterTable);
 document.getElementById('yearFilter').addEventListener('change', filterTable);

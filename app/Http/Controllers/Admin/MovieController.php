@@ -28,6 +28,7 @@ class MovieController extends Controller
             'genre'        => 'nullable',
             'cast'         => 'nullable',
             'duration'     => 'nullable|integer',
+            'base_price'   => 'nullable|numeric|min:0',
             'release_date' => 'nullable|date',
             'poster'       => 'nullable|image',
             'trailer'      => 'nullable|string',
@@ -60,9 +61,10 @@ class MovieController extends Controller
             'genre'        => 'nullable',
             'cast'         => 'nullable',
             'duration'     => 'nullable|integer',
+            'base_price'   => 'nullable|numeric|min:0',
             'release_date' => 'nullable|date',
             'poster'       => 'nullable|image',
-            'trailer'      => 'nullable|file|mimes:mp4,mov,avi,webm',
+            'trailer'      => 'nullable|string',
         ]);
 
         if ($request->hasFile('poster')) {
@@ -73,16 +75,6 @@ class MovieController extends Controller
             $name = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('uploads'), $name);
             $data['poster'] = $name;
-        }
-
-        if ($request->hasFile('trailer')) {
-            if ($movie->trailer && File::exists(public_path('uploads/' . $movie->trailer))) {
-                File::delete(public_path('uploads/' . $movie->trailer));
-            }
-            $file = $request->file('trailer');
-            $name = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads'), $name);
-            $data['trailer'] = $name;
         }
 
         $movie->update($data);

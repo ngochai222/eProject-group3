@@ -41,6 +41,18 @@
         <a href="/admin/customers" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/customers*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
             <i class="fa fa-users w-4"></i> Customer Accounts
         </a>
+        <a href="/admin/tickets" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/tickets*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-ticket w-4"></i> Tickets
+        </a>
+        <a href="/admin/pricing" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/pricing*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-tag w-4"></i> Pricing
+        </a>
+        <a href="/admin/seats" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/seats*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-th w-4"></i> Seats
+        </a>
+        <a href="/admin/promotions" class="flex items-center gap-2 px-4 py-2 rounded {{ request()->is('admin/promotions*') ? 'bg-gray-700 text-white' : 'text-gray-400 hover:bg-gray-800' }}">
+            <i class="fa fa-percent w-4"></i> Promotions
+        </a>
     </nav>
 
     <div class="p-4 border-t border-gray-800">

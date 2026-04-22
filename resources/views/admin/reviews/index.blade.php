@@ -9,10 +9,6 @@
     </a>
 </div>
 
-@if(session('success'))
-    <div class="alert alert-success mb-4">{{ session('success') }}</div>
-@endif
-
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 @foreach($reviews as $r)
 <div class="bg-[#11161c] p-4 rounded-xl">

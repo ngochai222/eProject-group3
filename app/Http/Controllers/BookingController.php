@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use App\Models\Showtime;
 use App\Models\Seat;
+use App\Models\Ticket;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -37,10 +39,22 @@ class BookingController extends Controller
             return back()->with('error', 'This seat is already booked!');
         }
 
-        Booking::create([
+        $booking = Booking::create([
             'user_id' => auth()->id(),
             'showtime_id' => $request->showtime_id,
             'seat_id' => $request->seat_id,
+            'customer_name' => auth()->user()->name,
+            'customer_email' => auth()->user()->email,
+            'price' => $request->price ?? 0,
+        ]);
+
+        // Create ticket
+        Ticket::create([
+            'booking_id' => $booking->id,
+            'seat_id' => $request->seat_id,
+            'price' => $request->price ?? 0,
+            'ticket_code' => strtoupper(Str::random(10)),
+            'booking_time' => now(),
         ]);
 
         return redirect()->route('booking.index')

@@ -52,12 +52,20 @@
                 class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none">
         </div>
 
-        {{-- Release Date --}}
-        <div>
-            <label class="text-sm text-gray-400">Release Date</label>
-            <input type="date" name="release_date"
-                class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none"
-                oninput="updatePreview()">
+        {{-- Release Date + Price --}}
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="text-sm text-gray-400">Release Date</label>
+                <input type="date" name="release_date" id="selReleaseDate"
+                    class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none"
+                    oninput="updatePreview()">
+            </div>
+            <div>
+                <label class="text-sm text-gray-400">Base Price ($)</label>
+                <input type="number" name="base_price" placeholder="10.00" min="0" step="0.5"
+                    class="w-full mt-2 px-4 py-2 bg-black rounded text-white border border-gray-700 focus:border-yellow-400 outline-none">
+            </div>
+        </div>
         </div>
 
         {{-- Description --}}

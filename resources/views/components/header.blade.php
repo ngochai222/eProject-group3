@@ -1,6 +1,19 @@
 <!-- Top App Bar -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+@if(session('success'))
+<div id="toast" class="fixed top-20 right-4 z-[9999] bg-green-500/90 backdrop-blur text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm font-semibold">
+    <span class="material-icons text-base">check_circle</span>
+    {{ session('success') }}
+</div>
+<script>
+    setTimeout(() => {
+        const t = document.getElementById('toast');
+        if (t) { t.style.transition = 'opacity 0.5s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 500); }
+    }, 3000);
+</script>
+@endif
+
 <header class="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-md px-4 md:px-6 py-2">
     <div class="flex items-center justify-between gap-4 md:gap-6 h-12 md:h-14">
         <div class="flex items-center gap-3">
@@ -33,9 +46,23 @@
             </a>
         </nav>
 
-        <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition">
+        @auth('customer')
+        <a href="{{ route('tickets.my') }}">
+        @endauth
+        <button class="w-9 h-9 rounded-full bg-gray-700 flex items-center justify-center border border-[#5E3F3B]/30 hover:bg-gray-600 transition relative">
             <span class="material-icons text-white text-[20px]">confirmation_number</span>
+            @auth('customer')
+                @php $ticketCount = \DB::table('bookings')->where('user_id', auth()->guard('customer')->id())->count(); @endphp
+                @if($ticketCount > 0)
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-[#E50914] rounded-full text-[9px] font-bold flex items-center justify-center">
+                        {{ $ticketCount > 9 ? '9+' : $ticketCount }}
+                    </span>
+                @endif
+            @endauth
         </button>
+        @auth('customer')
+        </a>
+        @endauth
 
         @if(auth()->guard('customer')->check())
             <div class="flex items-center gap-2">

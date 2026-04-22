@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Seat;
 use App\Models\Room;
 use App\Models\Ticket;
+use App\Models\Booking;
 
 class SeatController extends Controller
 {
@@ -77,7 +78,7 @@ class SeatController extends Controller
     {
         $seats = Seat::all();
 
-        $bookedSeats = Ticket::where('showtime_id', $showtime_id)
+        $bookedSeats = Booking::where('showtime_id', $showtime_id)
             ->pluck('seat_id')
             ->toArray();
 

@@ -2,13 +2,39 @@
 
 @section('content')
 
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold">Showtimes</h2>
-    <a href="{{ route('admin.showtimes.create') }}"
-       class="bg-yellow-400 text-black font-bold px-4 py-2 rounded hover:bg-yellow-300 transition">
-        + Assign Showtime
-    </a>
+<div class="flex justify-between items-center mb-2">
+    <div>
+        <h2 class="text-2xl font-bold text-white">Show Time</h2>
+        <p class="text-sm mt-1 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+            <span class="text-cyan-400">Shift Active: Morning Matinee (08:00 - 16:00)</span>
+        </p>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="text-gray-400 text-sm">User</span>
+        <div class="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
+            <i class="fa fa-user text-white"></i>
+        </div>
+    </div>
 </div>
+
+<a href="{{ route('admin.showtimes.create') }}"
+   class="inline-flex items-center gap-2 bg-yellow-400 text-black font-bold px-5 py-2 rounded-lg hover:bg-yellow-300 transition mb-4">
+    <i class="fa fa-calendar-plus"></i> Assign Showtime
+</a>
+
+@if(session('error'))
+    <div class="flex items-center justify-between bg-red-900/40 border border-red-500/30 rounded-xl px-5 py-3 mb-4 text-sm">
+        <div class="flex items-center gap-3">
+            <i class="fa fa-exclamation-triangle text-red-400"></i>
+            <div>
+                <p class="font-bold text-red-400">Scheduling Conflict Detected</p>
+                <p class="text-gray-400 text-xs">{{ session('error') }}</p>
+            </div>
+        </div>
+        <button class="text-yellow-400 font-bold text-xs hover:underline uppercase tracking-widest">Resolve Now</button>
+    </div>
+@endif
 
 <div class="flex gap-6">
 

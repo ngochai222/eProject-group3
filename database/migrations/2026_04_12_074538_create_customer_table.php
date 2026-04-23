@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('customer_avatar', 255);
             $table->text('customer_favorite');
             $table->string('customer_address', 255);
+            $table->string('role')->default('customer');
             $table->timestamps();
         });
     }

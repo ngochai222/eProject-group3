@@ -15,9 +15,8 @@ return new class extends Migration
             Schema::create('rooms', function (Blueprint $table) {
                 $table->id();
                 $table->string('rooms_number', 10);
-                $table->foreignId('cinema_id')
-                    ->constrained('cinema')
-                    ->cascadeOnDelete();
+                $table->unsignedBigInteger('cinema_id');
+                $table->foreign('cinema_id')->references('cinema_id')->on('cinema')->cascadeOnDelete();
                 $table->string('name');
                 $table->integer('capacity');
                 $table->timestamps();

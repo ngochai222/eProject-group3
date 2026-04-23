@@ -11,18 +11,22 @@ class CinemaController extends Controller
     public function edit($id)
     {
         $cinema = DB::table('cinema')->where('cinema_id', $id)->first();
-        return view('admin.cinema.edit', compact('cinema'));
+        return view('managers.cinema.edit', compact('cinema'));
     }
 
     public function create()
     {
-        return view('admin.cinema.create');
+        return view('managers.cinema.create');
     }
 
     public function index()
     {
-        $cinemas = DB::table('cinema')->paginate(10);
-        return view('admin.cinema.index', compact('cinemas'));
+        $cinemas = DB::table('cinema')
+            ->leftJoin('rooms', 'cinema.cinema_id', '=', 'rooms.cinema_id')
+            ->select('cinema.*', DB::raw('COUNT(rooms.id) as room_count'))
+            ->groupBy('cinema.cinema_id', 'cinema.cinema_name', 'cinema.cinema_address', 'cinema.cinema_image', 'cinema.created_at', 'cinema.updated_at')
+            ->paginate(10);
+        return view('managers.cinema.index', compact('cinemas'));
     }
 
     public function store(Request $request)
@@ -98,3 +102,5 @@ class CinemaController extends Controller
         return back()->with('success', 'Cinema deleted.');
     }
 }
+
+

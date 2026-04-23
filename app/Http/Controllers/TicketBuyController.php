@@ -41,7 +41,16 @@ class TicketBuyController extends Controller
         $cinema     = \DB::table('cinema')->where('cinema_id', $cinemaId)->first();
         $price      = PricingController::getPriceForDate($showtime->start_time, $showtime->movie->base_price ?? null);
 
-        // Lấy tất cả ghế đã được đặt cho showtime này
+        // Lấy ghế từ DB theo room của showtime
+        $dbSeats = collect();
+        if ($showtime->room_id) {
+            $dbSeats = \DB::table('seats')
+                ->where('room_id', $showtime->room_id)
+                ->orderBy('row')->orderBy('column')
+                ->get();
+        }
+
+        // Lấy ghế đã booked cho showtime này
         $bookedSeats = \DB::table('bookings')
             ->where('showtime_id', $showtimeId)
             ->whereNotNull('seats')
@@ -51,7 +60,7 @@ class TicketBuyController extends Controller
             ->values()
             ->toArray();
 
-        return view('tickets.seat', compact('showtime', 'cinema', 'price', 'bookedSeats'));
+        return view('tickets.seat', compact('showtime', 'cinema', 'price', 'bookedSeats', 'dbSeats'));
     }
 
     public function buy(Request $request)
@@ -69,26 +78,36 @@ class TicketBuyController extends Controller
         }
 
         $request->validate([
-            'showtime_id' => 'required|exists:showtimes,id',
-            'quantity'    => 'required|integer|min:1|max:10',
+            'showtime_id'      => 'required|exists:showtimes,id',
+            'quantity'         => 'required|integer|min:1|max:50',
+            'price_per_ticket' => 'required|numeric|min:0',
         ]);
+
+        $quantity = (int) $request->quantity;
+        $pricePerTicket = (float) $request->price_per_ticket;
+        $totalPrice = $quantity * $pricePerTicket;
 
         $customer = auth()->guard('customer')->user();
+        $seats = array_filter(explode(',', $request->seats));
 
-        \DB::table('bookings')->insert([
-            'user_id'       => $customer->customer_id,
-            'showtime_id'   => $request->showtime_id,
-            'seat_id'       => null,
-            'customer_name' => $customer->customer_name,
-            'customer_email'=> $customer->customer_email,
-            'total_price'   => $request->quantity * $request->price_per_ticket,
-            'price'         => $request->price_per_ticket,
-            'status'        => 'confirmed',
-            'seats'         => $request->seats,
-            'created_at'    => now(),
-            'updated_at'    => now(),
-        ]);
+        // Tạo 1 booking riêng cho mỗi ghế
+        foreach ($seats as $seat) {
+            \DB::table('bookings')->insert([
+                'user_id'       => $customer->customer_id,
+                'showtime_id'   => $request->showtime_id,
+                'seat_id'       => null,
+                'customer_name' => $customer->customer_name,
+                'customer_email'=> $customer->customer_email,
+                'total_price'   => $pricePerTicket,
+                'price'         => $pricePerTicket,
+                'status'        => 'confirmed',
+                'seats'         => trim($seat),
+                'created_at'    => now(),
+                'updated_at'    => now(),
+            ]);
+        }
 
         return redirect()->route('home')->with('success', 'Booking confirmed! Enjoy the movie.');
     }
 }
+

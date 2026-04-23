@@ -25,7 +25,7 @@ class SeatController extends Controller
             $seats = DB::table('seats')->where('room_id', $request->room_id)->orderBy('row')->orderBy('column')->get();
         }
 
-        return view('admin.seats.index', compact('cinemas', 'rooms', 'selectedRoom', 'seats'));
+        return view('managers.seats.index', compact('cinemas', 'rooms', 'selectedRoom', 'seats'));
     }
 
     public function generate(Request $request)
@@ -85,3 +85,5 @@ class SeatController extends Controller
         return back()->with('success', 'Seat deleted.');
     }
 }
+
+

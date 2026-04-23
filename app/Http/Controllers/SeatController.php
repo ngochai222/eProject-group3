@@ -89,3 +89,4 @@ class SeatController extends Controller
         return response()->json($seats);
     }
 }
+

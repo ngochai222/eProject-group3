@@ -11,7 +11,7 @@ class PromotionController extends Controller
     public function index()
     {
         $promotions = DB::table('promotion')->orderByDesc('created_at')->get();
-        return view('admin.promotions.index', compact('promotions'));
+        return view('managers.promotions.index', compact('promotions'));
     }
 
     public function store(Request $request)
@@ -43,3 +43,5 @@ class PromotionController extends Controller
         return back()->with('success', 'Promotion deleted.');
     }
 }
+
+

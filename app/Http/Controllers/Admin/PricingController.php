@@ -11,7 +11,7 @@ class PricingController extends Controller
     public function index()
     {
         $pricing = DB::table('pricing')->orderBy('day_of_week')->get();
-        return view('admin.pricing.index', compact('pricing'));
+        return view('managers.pricing.index', compact('pricing'));
     }
 
     public function update(Request $request)
@@ -46,3 +46,5 @@ class PricingController extends Controller
         return round($base * (1 + $surcharge / 100), 2);
     }
 }
+
+

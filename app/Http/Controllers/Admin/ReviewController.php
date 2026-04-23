@@ -12,13 +12,13 @@ class ReviewController extends Controller
     public function index()
     {
         $reviews = Review::with('movie')->latest()->get();
-        return view('admin.reviews.index', compact('reviews'));
+        return view('managers.reviews.index', compact('reviews'));
     }
 
     public function create()
     {
         $movies = Movie::all();
-        return view('admin.reviews.create', compact('movies'));
+        return view('managers.reviews.create', compact('movies'));
     }
 
     public function store(Request $request)
@@ -51,3 +51,4 @@ class ReviewController extends Controller
         return back()->with('success', '🗑 Đã xóa!');
     }
 }
+

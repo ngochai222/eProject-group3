@@ -22,17 +22,38 @@ class AdminController extends Controller
             ->take(5)
             ->get();
 
-        return view('admin.layout.dashboard', compact(
-            'totalMovies',
-            'totalShowtimes',
-            'totalReviews',
-            'avgRating',
-            'topMovies'
+        // Tasks assigned to this manager
+        $managerId = session('manager_id');
+        $myTasks = $managerId
+            ? \DB::table('manager_tasks')
+                ->where('manager_id', $managerId)
+                ->orderBy('date')->orderByDesc('created_at')
+                ->get()
+            : collect();
+
+        // Revenue by day of week (last 7 days)
+        $revenueByDay = [];
+        $days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $revenue = \DB::table('bookings')
+                ->whereDate('created_at', $date->toDateString())
+                ->sum('total_price');
+            $revenueByDay[] = [
+                'day'     => $date->format('D'),
+                'revenue' => (float) $revenue,
+                'isWeekend' => in_array($date->dayOfWeek, [0, 6]),
+            ];
+        }
+        $maxRevenue = max(array_column($revenueByDay, 'revenue')) ?: 1;
+
+        return view('managers.layout.dashboard', compact(
+            'totalMovies', 'totalShowtimes', 'totalReviews', 'avgRating', 'topMovies', 'myTasks', 'revenueByDay', 'maxRevenue'
         ));
     }
     public function showLogin()
     {
-        return view('admin.login');
+        return view('managers.login');
     }
 
     public function login(Request $request)
@@ -70,3 +91,4 @@ class AdminController extends Controller
     }
     
 }
+

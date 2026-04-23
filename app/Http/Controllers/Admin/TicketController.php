@@ -17,6 +17,7 @@ class TicketController extends Controller
                 'bookings.customer_name',
                 'bookings.customer_email',
                 'bookings.seats',
+                'bookings.price',
                 'movies.title as movie_title',
                 'showtimes.start_time',
                 'bookings.total_price',
@@ -30,7 +31,7 @@ class TicketController extends Controller
         $totalBooked  = DB::table('bookings')->count();
         $validated    = DB::table('bookings')->where('status', 'confirmed')->count();
 
-        return view('admin.tickets.index', compact('bookings', 'todayRevenue', 'totalBooked', 'validated'));
+        return view('managers.tickets.index', compact('bookings', 'todayRevenue', 'totalBooked', 'validated'));
     }
 
     public function destroy($id)
@@ -39,3 +40,5 @@ class TicketController extends Controller
         return back()->with('success', 'Booking deleted.');
     }
 }
+
+

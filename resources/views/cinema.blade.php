@@ -105,13 +105,6 @@
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant opacity-50" data-icon="search">search</span>
 <input class="w-full bg-on-primary-container border-none py-4 pl-12 pr-4 rounded-xl text-on-surface-fixed-variant placeholder:text-on-surface-variant/50 focus:ring-2 focus:ring-primary-container/40 transition-all font-body" placeholder="Search for cinema name or district..." type="text"/>
 </div>
-<div class="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-<button class="whitespace-nowrap px-6 py-2.5 rounded-full bg-primary-container text-white font-semibold text-sm shadow-lg shadow-primary-container/20 border border-primary-container">All Cities</button>
-<button class="whitespace-nowrap px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface/70 font-medium text-sm border border-outline-variant/10 hover:border-primary-container/50 transition-colors">Hanoi</button>
-<button class="whitespace-nowrap px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface/70 font-medium text-sm border border-outline-variant/10 hover:border-primary-container/50 transition-colors">Ho Chi Minh City</button>
-<button class="whitespace-nowrap px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface/70 font-medium text-sm border border-outline-variant/10 hover:border-primary-container/50 transition-colors">Da Nang</button>
-<button class="whitespace-nowrap px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface/70 font-medium text-sm border border-outline-variant/10 hover:border-primary-container/50 transition-colors">Hai Phong</button>
-</div>
 </section>
 <!-- Cinema List (Asymmetric Bento-inspired Layout) -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

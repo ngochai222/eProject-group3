@@ -22,7 +22,25 @@ class Customer extends Authenticatable
         'customer_avatar',
         'customer_favorite',
         'customer_address',
+        'role',
+        'permissions',
+        'is_active',
     ];
+    // Kiểm tra vai trò
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isManager()
+    {
+        return $this->role === 'manager';
+    }
+
+    public function isCustomer()
+    {
+        return $this->role === 'customer';
+    }
 
     protected $hidden = [
         'customer_password',
@@ -31,6 +49,7 @@ class Customer extends Authenticatable
 
     protected $casts = [
         'customer_date_of_birth' => 'date',
+        'permissions'            => 'array',
     ];
 
     // Laravel dùng cái này để retrieve user từ session

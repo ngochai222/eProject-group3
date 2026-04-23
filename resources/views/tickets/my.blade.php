@@ -59,7 +59,7 @@
                         @if($b->seats)
                         <span class="flex items-center gap-1">
                             <span class="material-icons text-sm">event_seat</span>
-                            {{ $b->seats }}
+                            Seat <strong class="text-yellow-400">{{ $b->seats }}</strong>
                         </span>
                         @endif
                     </div>

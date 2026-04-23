@@ -22,7 +22,7 @@ class ShowtimeController extends Controller
             ->map(fn($d) => \Carbon\Carbon::parse($d)->day)
             ->toArray();
 
-        return view('admin.showtimes.index', compact('showtimes', 'showtimeDates'));
+        return view('managers.showtimes.index', compact('showtimes', 'showtimeDates'));
     }
 
     // FORM CREATE
@@ -30,7 +30,7 @@ class ShowtimeController extends Controller
     {
         $movies  = Movie::all();
         $cinemas = \DB::table('cinema')->get();
-        return view('admin.showtimes.create', compact('movies', 'cinemas'));
+        return view('managers.showtimes.create', compact('movies', 'cinemas'));
     }
 
     // STORE (FIX CHÍNH Ở ĐÂY)
@@ -43,14 +43,9 @@ class ShowtimeController extends Controller
         ]);
 
         $movie = Movie::findOrFail($request->movie_id);
-
-        // ghép ngày + giờ
         $start = strtotime($request->date . ' ' . $request->time);
-
-        // auto giờ kết thúc
         $end = $start + ($movie->duration * 60);
 
-        // 🚫 tránh trùng lịch (cùng phòng nếu có room thì thêm điều kiện room)
         $exists = Showtime::where('movie_id', $request->movie_id)
             ->where('start_time', date('Y-m-d H:i:s', $start))
             ->exists();
@@ -60,9 +55,10 @@ class ShowtimeController extends Controller
         }
 
         Showtime::create([
-            'movie_id' => $request->movie_id,
+            'movie_id'   => $request->movie_id,
+            'room_id'    => $request->room_id ?: null,
             'start_time' => date('Y-m-d H:i:s', $start),
-            'end_time' => date('Y-m-d H:i:s', $end),
+            'end_time'   => date('Y-m-d H:i:s', $end),
         ]);
 
         return redirect()->route('admin.showtimes.index')
@@ -75,7 +71,7 @@ class ShowtimeController extends Controller
         $showtime = Showtime::findOrFail($id);
         $movies = Movie::all();
 
-        return view('admin.showtimes.edit', compact('showtime', 'movies'));
+        return view('managers.showtimes.edit', compact('showtime', 'movies'));
     }
 
     // UPDATE
@@ -111,3 +107,4 @@ class ShowtimeController extends Controller
         return back()->with('success', 'Showtime deleted.');
     }
 }
+

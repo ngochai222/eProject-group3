@@ -12,7 +12,7 @@ class CustomerController extends Controller
         $customers = Customer::latest()->paginate(10);
         $totalActive = Customer::count();
         $selected = $customers->first();
-        return view('admin.customers.index', compact('customers', 'totalActive', 'selected'));
+        return view('managers.customers.index', compact('customers', 'totalActive', 'selected'));
     }
 
     public function show($id)
@@ -20,7 +20,7 @@ class CustomerController extends Controller
         $customers = Customer::latest()->paginate(10);
         $totalActive = Customer::count();
         $selected = Customer::findOrFail($id);
-        return view('admin.customers.index', compact('customers', 'totalActive', 'selected'));
+        return view('managers.customers.index', compact('customers', 'totalActive', 'selected'));
     }
 
     public function suspend($id)
@@ -29,3 +29,5 @@ class CustomerController extends Controller
         return back()->with('success', 'Account suspended.');
     }
 }
+
+

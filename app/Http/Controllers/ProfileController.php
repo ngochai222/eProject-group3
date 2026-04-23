@@ -30,6 +30,7 @@ class ProfileController extends Controller
             ->where('showtimes.start_time', '<', now())
             ->select('movies.title', 'movies.poster', 'showtimes.start_time')
             ->orderByDesc('showtimes.start_time')
+            ->distinct('movies.title')
             ->limit(6)
             ->get();
 
@@ -70,3 +71,4 @@ class ProfileController extends Controller
         return redirect()->route('profile')->with('success', 'Profile updated successfully.');
     }
 }
+

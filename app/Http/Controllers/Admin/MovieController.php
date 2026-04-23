@@ -12,12 +12,12 @@ class MovieController extends Controller
     public function index()
     {
         $movies = Movie::with('showtimes')->withAvg('reviews', 'rating')->get();
-        return view('admin.movies.index', compact('movies'));
+        return view('managers.movies.index', compact('movies'));
     }
 
     public function create()
     {
-        return view('admin.movies.create');
+        return view('managers.movies.create');
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class MovieController extends Controller
     public function edit(string $id)
     {
         $movie = Movie::findOrFail($id);
-        return view('admin.movies.edit', compact('movie'));
+        return view('managers.movies.edit', compact('movie'));
     }
 
     public function update(Request $request, string $id)
@@ -96,3 +96,5 @@ class MovieController extends Controller
         return redirect()->route('admin.movies.index')->with('success', 'Movie deleted.');
     }
 }
+
+

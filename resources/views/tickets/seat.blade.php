@@ -37,38 +37,63 @@
             </div>
 
             {{-- Seats grid --}}
-            @php
-                $rows = ['A','B','C','D','E','F'];
-                $cols = 8;
-                $vipRow = 'F';
-            @endphp
-
-            <div class="space-y-3 mb-8">
-                @foreach($rows as $row)
-                <div class="flex items-center gap-2 justify-center">
-                    <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
-                    <div class="flex gap-2">
-                        @for($col = 1; $col <= $cols; $col++)
-                            @php
-                                $isBooked = in_array($seatId ?? ($row.$col), $bookedSeats ?? []);
-                                $isVip = $row === $vipRow;
-                                $seatId = $row . $col;
-                            @endphp
-                            @if($col == 5) <div class="w-4"></div> @endif
-                            <div class="seat {{ $isBooked ? 'seat-booked' : ($isVip ? 'seat-vip' : 'seat-available') }}"
-                                 id="seat-{{ $seatId }}"
-                                 data-seat="{{ $seatId }}"
-                                 data-row="{{ $row }}"
-                                 data-col="{{ $col }}"
-                                 data-vip="{{ $isVip ? '1' : '0' }}"
-                                 @if(!$isBooked) onclick="toggleSeat(this)" @endif>
-                            </div>
-                        @endfor
+            @if(isset($dbSeats) && $dbSeats->isNotEmpty())
+                {{-- From DB --}}
+                @php $grouped = $dbSeats->groupBy('row'); @endphp
+                <div class="space-y-3 mb-8">
+                    @foreach($grouped as $row => $rowSeats)
+                    <div class="flex items-center gap-2 justify-center">
+                        <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
+                        <div class="flex gap-2">
+                            @foreach($rowSeats as $seat)
+                                @php
+                                    $isBooked = in_array($seat->seat_number, $bookedSeats ?? []);
+                                    $isVip = $seat->seat_type == 'vip';
+                                @endphp
+                                <div class="seat {{ $isBooked ? 'seat-booked' : ($isVip ? 'seat-vip' : 'seat-available') }}"
+                                     id="seat-{{ $seat->seat_number }}"
+                                     data-seat="{{ $seat->seat_number }}"
+                                     data-vip="{{ $isVip ? '1' : '0' }}"
+                                     @if(!$isBooked) onclick="toggleSeat(this)" @endif>
+                                </div>
+                            @endforeach
+                        </div>
+                        <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
                     </div>
-                    <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
+                    @endforeach
                 </div>
-                @endforeach
-            </div>
+            @else
+                {{-- Fallback hardcode --}}
+                @php
+                    $rows = ['A','B','C','D','E','F'];
+                    $cols = 8;
+                    $vipRow = 'F';
+                @endphp
+                <div class="space-y-3 mb-8">
+                    @foreach($rows as $row)
+                    <div class="flex items-center gap-2 justify-center">
+                        <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
+                        <div class="flex gap-2">
+                            @for($col = 1; $col <= $cols; $col++)
+                                @php
+                                    $seatId = $row . $col;
+                                    $isBooked = in_array($seatId, $bookedSeats ?? []);
+                                    $isVip = $row === $vipRow;
+                                @endphp
+                                @if($col == 5) <div class="w-4"></div> @endif
+                                <div class="seat {{ $isBooked ? 'seat-booked' : ($isVip ? 'seat-vip' : 'seat-available') }}"
+                                     id="seat-{{ $seatId }}"
+                                     data-seat="{{ $seatId }}"
+                                     data-vip="{{ $isVip ? '1' : '0' }}"
+                                     @if(!$isBooked) onclick="toggleSeat(this)" @endif>
+                                </div>
+                            @endfor
+                        </div>
+                        <span class="text-gray-600 text-xs w-4">{{ $row }}</span>
+                    </div>
+                    @endforeach
+                </div>
+            @endif
 
             {{-- Legend --}}
             <div class="flex items-center justify-center gap-6 text-xs text-gray-400">

@@ -73,7 +73,7 @@ input:focus {
 <div class="space-y-5">
 <!-- Username Input -->
 <div data-purpose="username-field">
-<label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider" for="username">Username</label>
+<label class="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider" for="username">Email</label>
 <input class="block w-full px-4 py-3 rounded-xl bg-white text-gray-900 border-none placeholder-gray-400 text-sm focus:ring-2 focus:ring-red-500" id="username" name="username" placeholder="Enter your username..." required="" type="text"/>
 </div>
 <!-- Password Input -->

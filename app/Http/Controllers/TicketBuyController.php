@@ -85,7 +85,8 @@ class TicketBuyController extends Controller
 
         $quantity = (int) $request->quantity;
         $pricePerTicket = (float) $request->price_per_ticket;
-        $totalPrice = $quantity * $pricePerTicket;
+        $discountAmount = (float) $request->discount_amount;
+        $totalPrice = max(0, ($quantity * $pricePerTicket) - $discountAmount);
 
         $customer = auth()->guard('customer')->user();
         $seats = array_filter(explode(',', $request->seats));

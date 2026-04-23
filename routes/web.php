@@ -38,11 +38,46 @@ Route::get('/showtime', [MovieController::class, 'showtime'])->name('showtime');
 Route::get('/tickets/buy', [TicketBuyController::class, 'buy'])->name('tickets.buy');
 Route::get('/tickets/seat', [TicketBuyController::class, 'seat'])->name('tickets.seat');
 Route::post('/tickets/confirm', [TicketBuyController::class, 'confirm'])->name('tickets.confirm');
+Route::post('/promo/validate', function(\Illuminate\Http\Request $request) {
+    $code = strtoupper(trim($request->code));
+    $promo = \DB::table('promotion')
+        ->where('pro_string', $code)
+        ->where('pro_start_date', '<=', now())
+        ->where('pro_end_date', '>=', now())
+        ->first();
+    if ($promo) {
+        return response()->json(['valid' => true, 'type' => $promo->pro_discount_type, 'value' => $promo->pro_discount_value, 'code' => $code]);
+    }
+    return response()->json(['valid' => false]);
+})->name('promo.validate');
 
 Route::middleware('auth:customer')->group(function () {
     Route::get('/my-tickets', [TicketBuyController::class, 'myTickets'])->name('tickets.my');
     Route::get('/profile', [ProfileController::class, 'profile'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/feedback', function(\Illuminate\Http\Request $request) {
+        $request->validate(['movie_id'=>'required','rating'=>'required|integer|min:1|max:5','comment'=>'nullable|string|max:500']);
+        $customer = auth()->guard('customer')->user();
+        // Check if customer has booked this movie
+        $hasBooked = \DB::table('bookings')
+            ->join('showtimes','bookings.showtime_id','=','showtimes.id')
+            ->where('showtimes.movie_id', $request->movie_id)
+            ->where('bookings.user_id', $customer->customer_id)
+            ->exists();
+        if (!$hasBooked) return back()->withErrors(['feedback'=>'You must have a ticket to review this movie.']);
+        // Check not already reviewed
+        $exists = \DB::table('reviews')->where('movie_id',$request->movie_id)->where('user_name',$customer->customer_name)->exists();
+        if ($exists) return back()->withErrors(['feedback'=>'You have already reviewed this movie.']);
+        \DB::table('reviews')->insert([
+            'movie_id'  => $request->movie_id,
+            'user_name' => $customer->customer_name,
+            'rating'    => $request->rating,
+            'comment'   => $request->comment,
+            'created_at'=> now(),
+            'updated_at'=> now(),
+        ]);
+        return back()->with('success', 'Thank you for your feedback!');
+    })->name('feedback.store');
 });
 
 // Auth

@@ -135,6 +135,26 @@ class MovieController extends Controller
             abort(404);
         }
 
-        return view('movie-detail', compact('movie'));
+        // Reviews
+        $reviews = \DB::table('reviews')->where('movie_id', $index)->orderByDesc('created_at')->get();
+        $avgRating = $reviews->avg('rating');
+
+        // Check if logged-in customer has booked this movie
+        $hasBooked = false;
+        $hasReviewed = false;
+        if (auth()->guard('customer')->check()) {
+            $customer = auth()->guard('customer')->user();
+            $hasBooked = \DB::table('bookings')
+                ->join('showtimes','bookings.showtime_id','=','showtimes.id')
+                ->where('showtimes.movie_id', $index)
+                ->where('bookings.user_id', $customer->customer_id)
+                ->exists();
+            $hasReviewed = \DB::table('reviews')
+                ->where('movie_id', $index)
+                ->where('user_name', $customer->customer_name)
+                ->exists();
+        }
+
+        return view('movie-detail', compact('movie', 'reviews', 'avgRating', 'hasBooked', 'hasReviewed'));
     }
 }

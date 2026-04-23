@@ -222,7 +222,7 @@ async function loadRooms(cinemaId) {
     const sel = document.getElementById('selRoom');
     sel.innerHTML = '<option>Loading...</option>';
     if (!cinemaId) { sel.innerHTML = '<option value="">-- Select cinema first --</option>'; return; }
-    const res = await fetch(`/admin/rooms?cinema_id=${cinemaId}`);
+    const res = await fetch(`/managers/rooms?cinema_id=${cinemaId}`);
     const rooms = await res.json();
     sel.innerHTML = '<option value="">-- Choose room --</option>';
     rooms.forEach(r => {

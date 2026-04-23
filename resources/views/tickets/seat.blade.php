@@ -158,6 +158,20 @@
                         <input type="hidden" name="quantity" id="quantityInput" value="0">
                         <input type="hidden" name="price_per_ticket" value="{{ $price }}">
                         <input type="hidden" name="seats" id="seatsInput" value="">
+                        <input type="hidden" name="promo_code" id="promoCodeInput" value="">
+                        <input type="hidden" name="discount_amount" id="discountAmountInput" value="0">
+
+                        {{-- Promo Code --}}
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 block mb-1">Promo Code</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="promoInput" placeholder="Enter code..."
+                                    class="flex-1 px-3 py-2 bg-[#0f172a] rounded-lg text-white border border-gray-700 focus:border-yellow-400 outline-none text-sm uppercase">
+                                <button type="button" onclick="applyPromo()"
+                                    class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-xs rounded-lg transition">Apply</button>
+                            </div>
+                            <p id="promoMsg" class="text-xs mt-1 hidden"></p>
+                        </div>
 
                         <button type="submit" id="confirmBtn" disabled
                             class="w-full py-3 rounded-xl font-black text-sm uppercase tracking-widest transition
@@ -196,7 +210,66 @@ function toggleSeat(el) {
 
 function updateSummary() {
     const count = selectedSeats.length;
-    const total = count * pricePerSeat;
+    const subtotal = count * pricePerSeat;
+    const discount = parseFloat(document.getElementById('discountAmountInput').value) || 0;
+    const total = Math.max(0, subtotal - discount);
+
+    document.getElementById('selectedSeatsLabel').textContent = count > 0 ? selectedSeats.join(', ') : '—';
+    document.getElementById('totalPriceLabel').textContent = '$' + total.toFixed(2);$' + total.toFixed(2);
+    document.getElementById('quantityInput').value = count;
+    document.getElementById('seatsInput').value = selectedSeats.join(',');
+
+    const btn = document.getElementById('confirmBtn');
+    if (count > 0) {
+        btn.disabled = false;
+        btn.className = 'w-full py-3 rounded-xl font-black text-sm uppercase tracking-widest transition bg-yellow-400 text-black hover:bg-yellow-300 cursor-pointer';
+    } else {
+        btn.disabled = true;
+        btn.className = 'w-full py-3 rounded-xl font-black text-sm uppercase tracking-widest transition bg-gray-700 text-gray-500 cursor-not-allowed';
+    }
+}
+
+let promoData = null;
+
+async function applyPromo() {
+    const code = document.getElementById('promoInput').value.trim();
+    const msg = document.getElementById('promoMsg');
+    if (!code) return;
+
+    const res = await fetch('{{ route("promo.validate") }}', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+        body: JSON.stringify({ code })
+    });
+    const data = await res.json();
+
+    msg.classList.remove('hidden');
+    if (data.valid) {
+        promoData = data;
+        document.getElementById('promoCodeInput').value = data.code;
+
+        const count = selectedSeats.length;
+        const subtotal = count * pricePerSeat;
+        let discount = 0;
+        if (data.type === 'Percentage') {
+            discount = subtotal * (data.value / 100);
+        } else {
+            discount = parseFloat(data.value);
+        }
+        document.getElementById('discountAmountInput').value = discount.toFixed(2);
+
+        msg.className = 'text-xs mt-1 text-green-400';
+        msg.textContent = '✓ Code applied! -' + (data.type === 'Percentage' ? data.value + '%' : '$' + data.value);$' + data.value);
+        updateSummary();
+    } else {
+        promoData = null;
+        document.getElementById('promoCodeInput').value = '';
+        document.getElementById('discountAmountInput').value = '0';
+        msg.className = 'text-xs mt-1 text-red-400';
+        msg.textContent = '✗ Invalid or expired code';
+        updateSummary();
+    }
+}
 
     document.getElementById('selectedSeatsLabel').textContent =
         count > 0 ? selectedSeats.join(', ') : '—';
